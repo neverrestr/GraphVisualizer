@@ -45,7 +45,9 @@ namespace common {
         ATTRIBUTE_STRING_VALUE = 8, ///< string attribute value
         ATTRIBUTE_INT_VALUE = 9,    ///< integer attribute value
         CLOSED_CURLY_BRACKET = 10,  ///< graph body end symbol
-        CLOSED_SQUARE_BRACKET = 11  ///< attributes end symbol
+        CLOSED_SQUARE_BRACKET = 11,  ///< attributes end symbol
+        ATTRIBUTE_KEY = 12,
+        // WEIGHT_ATTRIBUTE = 13,  // <-- Добавь эту строку
     };
 
     /**
@@ -62,7 +64,7 @@ namespace common {
      * Represents edge without source node.
      */
     struct Connection {
-        std::optional<int> weight;
+        std::optional<int> weight; //поле для веса
         std::optional<std::string> label; 
         std::string peer;
 

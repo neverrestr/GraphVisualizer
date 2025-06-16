@@ -1,0 +1,517 @@
+\doxysection{parser.\+hpp}
+\hypertarget{parser_8hpp_source}{}\label{parser_8hpp_source}\index{src/parser/parser.hpp@{src/parser/parser.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ standard}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <cstdint>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{comment}{//\ internal}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <common/action-\/queue.hpp>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <common/common.hpp>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <algorithms/traversal.hpp>}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{comment}{//\ contrib}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <tinyfsm.hpp>}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{namespace\ }parser\ \{}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ throw\_invalid\_input(std::string\ message)\ \{}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(message);}
+\DoxyCodeLine{00020\ \ \ \ \ \}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structparser_1_1_shared_state}{SharedState}}\ \{}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ std::shared\_ptr<common::Graph>\ graph;}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcommon_1_1_action_queue}{common::ActionQueue}}\ backoffQueue;}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcommon_1_1_action_queue}{common::ActionQueue}}\ actionQueue;}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ std::string\ fromNodeId;}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ std::string\ toNodeId;}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ std::string\ label;}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ std::string\ expectedValue;}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ std::uint8\_t\ flags\ =\ 0x0;}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ weight\ =\ -\/1;\ }
+\DoxyCodeLine{00035\ \ \ \ \ \};}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{comment}{//\ 1.\ Event\ Declarations}}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structparser_1_1_graph_event}{GraphEvent}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ \mbox{\hyperlink{structtinyfsm_1_1_event}{tinyfsm::Event}}\ \{\};}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structparser_1_1_input_open_curly_bracket}{InputOpenCurlyBracket}}\ \ \ \ :\ \mbox{\hyperlink{structparser_1_1_graph_event}{GraphEvent}}\ \{\};}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structparser_1_1_input_close_curly_bracket}{InputCloseCurlyBracket}}\ \ \ :\ \mbox{\hyperlink{structparser_1_1_graph_event}{GraphEvent}}\ \{\};}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structparser_1_1_input_open_square_bracket}{InputOpenSquareBracket}}\ \ \ :\ \mbox{\hyperlink{structparser_1_1_graph_event}{GraphEvent}}\ \{\};}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structparser_1_1_input_close_square_bracket}{InputCloseSquareBracket}}\ \ :\ \mbox{\hyperlink{structparser_1_1_graph_event}{GraphEvent}}\ \{\};}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structparser_1_1_input_edge}{InputEdge}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ \mbox{\hyperlink{structparser_1_1_graph_event}{GraphEvent}}\ \{\};}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structparser_1_1_input_label}{InputLabel}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ \mbox{\hyperlink{structparser_1_1_graph_event}{GraphEvent}}\ \{\};}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structparser_1_1_input_equal}{InputEqual}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ \mbox{\hyperlink{structparser_1_1_graph_event}{GraphEvent}}\ \{\};}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structparser_1_1_input_graph_type}{InputGraphType}}\ \ \ \ \ \ \ \ \ \ \ :\ \mbox{\hyperlink{structparser_1_1_graph_event}{GraphEvent}}\ \{\ std::string\ graphType;\ \};}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structparser_1_1_input_node_id}{InputNodeId}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ \mbox{\hyperlink{structparser_1_1_graph_event}{GraphEvent}}\ \{\ std::string\ NodeID;\ \};}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structparser_1_1_input_string_value}{InputStringValue}}\ \ \ \ \ \ \ \ \ :\ \mbox{\hyperlink{structparser_1_1_graph_event}{GraphEvent}}\ \{\ std::string\ label;\ \};}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structparser_1_1_input_int_value}{InputIntValue}}\ \ \ \ \ \ \ \ \ \ \ \ :\ \mbox{\hyperlink{structparser_1_1_graph_event}{GraphEvent}}\ \{\ \textcolor{keywordtype}{int}\ weight;\ \};}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{comment}{//\ 2.\ State\ Machine\ Base\ Class\ Declaration}}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classparser_1_1_lexeme_parser}{LexemeParser}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classtinyfsm_1_1_fsm}{tinyfsm::Fsm}}<LexemeParser>\ \{}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ react(\mbox{\hyperlink{structparser_1_1_input_graph_type}{InputGraphType}}\ \textcolor{keyword}{const}\ \&)\ \ \ \ \ \ \ \ \ \ \{\};}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ react(\mbox{\hyperlink{structparser_1_1_input_open_curly_bracket}{InputOpenCurlyBracket}}\ \textcolor{keyword}{const}\ \&)\ \ \ \{\ throw\_invalid\_input(\textcolor{stringliteral}{"{}"{}});\ \};}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ react(\mbox{\hyperlink{structparser_1_1_input_close_curly_bracket}{InputCloseCurlyBracket}}\ \textcolor{keyword}{const}\ \&)\ \ \{\ throw\_invalid\_input(\textcolor{stringliteral}{"{}"{}});\ \};}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ react(\mbox{\hyperlink{structparser_1_1_input_node_id}{InputNodeId}}\ \textcolor{keyword}{const}\ \&)\ \ \ \ \ \ \ \ \ \ \ \ \ \{\ throw\_invalid\_input(\textcolor{stringliteral}{"{}"{}});\ \};}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ react(\mbox{\hyperlink{structparser_1_1_input_open_square_bracket}{InputOpenSquareBracket}}\ \textcolor{keyword}{const}\ \&)\ \ \{\ throw\_invalid\_input(\textcolor{stringliteral}{"{}"{}});\ \};}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ react(\mbox{\hyperlink{structparser_1_1_input_close_square_bracket}{InputCloseSquareBracket}}\ \textcolor{keyword}{const}\ \&)\ \{\ throw\_invalid\_input(\textcolor{stringliteral}{"{}"{}});\ \};}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ react(\mbox{\hyperlink{structparser_1_1_input_edge}{InputEdge}}\ \textcolor{keyword}{const}\ \&)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ throw\_invalid\_input(\textcolor{stringliteral}{"{}"{}});\ \};}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ react(\mbox{\hyperlink{structparser_1_1_input_label}{InputLabel}}\ \textcolor{keyword}{const}\ \&)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ throw\_invalid\_input(\textcolor{stringliteral}{"{}"{}});\ \};}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ react(\mbox{\hyperlink{structparser_1_1_input_equal}{InputEqual}}\ \textcolor{keyword}{const}\ \&)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ throw\_invalid\_input(\textcolor{stringliteral}{"{}"{}});\ \};}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ react(\mbox{\hyperlink{structparser_1_1_input_string_value}{InputStringValue}}\ \textcolor{keyword}{const}\ \&)\ \ \ \ \ \ \ \ \{\ throw\_invalid\_input(\textcolor{stringliteral}{"{}"{}});\ \};}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ react(\mbox{\hyperlink{structparser_1_1_input_int_value}{InputIntValue}}\ \textcolor{keyword}{const}\ \&)\ \ \ \ \ \ \ \ \ \ \ \{\ throw\_invalid\_input(\textcolor{stringliteral}{"{}"{}});\ \};}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ reset();}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ entry();\ \ \textcolor{comment}{/*\ entry\ actions\ in\ some\ states\ */}}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ exit();\ \ \textcolor{comment}{/*\ no\ exit\ actions\ */}}
+\DoxyCodeLine{00074\ \ \ \ \ }
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \textcolor{keyword}{friend}\ std::shared\_ptr<common::TraversalGraph>\ \mbox{\hyperlink{classparser_1_1_lexeme_parser_ab314ae6bcb88dfa3ee41dd8bf6f15d6d}{parse}}(std::vector<common::Lexeme>\&\ input);}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \mbox{\hyperlink{structparser_1_1_shared_state}{SharedState}}\ shared\ \{\};}
+\DoxyCodeLine{00080\ \ \ \ \ \};}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{comment}{//\ 3.\ State\ Declarations}}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classparser_1_1_idle}{Idle}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classparser_1_1_lexeme_parser}{LexemeParser}}\ \{}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ react(\mbox{\hyperlink{structparser_1_1_input_graph_type}{InputGraphType}}\ \textcolor{keyword}{const}\ \&)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00088\ \ \ \ \ \};}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classparser_1_1_graph_type}{GraphType}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classparser_1_1_lexeme_parser}{LexemeParser}}\ \{}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ react(\mbox{\hyperlink{structparser_1_1_input_open_curly_bracket}{InputOpenCurlyBracket}}\ \textcolor{keyword}{const}\ \&)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00092\ \ \ \ \ \};}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classparser_1_1_open_curly_bracket}{OpenCurlyBracket}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classparser_1_1_lexeme_parser}{LexemeParser}}\ \{}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ react(\mbox{\hyperlink{structparser_1_1_input_node_id}{InputNodeId}}\ \textcolor{keyword}{const}\ \&)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ react(\mbox{\hyperlink{structparser_1_1_input_close_curly_bracket}{InputCloseCurlyBracket}}\ \textcolor{keyword}{const}\ \&)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00097\ \ \ \ \ \};}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classparser_1_1_from_node_i_d}{FromNodeID}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classparser_1_1_lexeme_parser}{LexemeParser}}\ \{}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ react(\mbox{\hyperlink{structparser_1_1_input_close_curly_bracket}{InputCloseCurlyBracket}}\ \textcolor{keyword}{const}\&)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ react(\mbox{\hyperlink{structparser_1_1_input_open_square_bracket}{InputOpenSquareBracket}}\ \textcolor{keyword}{const}\&)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ react(\mbox{\hyperlink{structparser_1_1_input_edge}{InputEdge}}\ \textcolor{keyword}{const}\&)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ react(\mbox{\hyperlink{structparser_1_1_input_node_id}{InputNodeId}}\ \textcolor{keyword}{const}\&)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00104\ \ \ \ \ \};}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classparser_1_1_open_square_bracket}{OpenSquareBracket}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classparser_1_1_lexeme_parser}{LexemeParser}}\ \{}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ react(\mbox{\hyperlink{structparser_1_1_input_label}{InputLabel}}\ \textcolor{keyword}{const}\ \&)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00108\ \ \ \ \ \};}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classparser_1_1_edge}{Edge}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classparser_1_1_lexeme_parser}{LexemeParser}}\ \{}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ react(\mbox{\hyperlink{structparser_1_1_input_node_id}{InputNodeId}}\ \textcolor{keyword}{const}\ \&)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00112\ \ \ \ \ \};}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classparser_1_1_to_node_i_d}{ToNodeID}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classparser_1_1_lexeme_parser}{LexemeParser}}\ \{}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ react(\mbox{\hyperlink{structparser_1_1_input_open_square_bracket}{InputOpenSquareBracket}}\ \textcolor{keyword}{const}\ \&)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ react(\mbox{\hyperlink{structparser_1_1_input_node_id}{InputNodeId}}\ \textcolor{keyword}{const}\&\ )\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ react(\mbox{\hyperlink{structparser_1_1_input_close_curly_bracket}{InputCloseCurlyBracket}}\ \textcolor{keyword}{const}\&)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00118\ \ \ \ \ \};}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classparser_1_1_label}{Label}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classparser_1_1_lexeme_parser}{LexemeParser}}\ \{}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ react(\mbox{\hyperlink{structparser_1_1_input_equal}{InputEqual}}\ \textcolor{keyword}{const}\ \&)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00122\ \ \ \ \ \};}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classparser_1_1_equal}{Equal}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classparser_1_1_lexeme_parser}{LexemeParser}}\ \{}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ react(\mbox{\hyperlink{structparser_1_1_input_string_value}{InputStringValue}}\ \textcolor{keyword}{const}\ \&)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ react(\mbox{\hyperlink{structparser_1_1_input_int_value}{InputIntValue}}\ \textcolor{keyword}{const}\ \&)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00127\ \ \ \ \ \};}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classparser_1_1_value}{Value}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classparser_1_1_lexeme_parser}{LexemeParser}}\ \{}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ react(\mbox{\hyperlink{structparser_1_1_input_close_square_bracket}{InputCloseSquareBracket}}\ \textcolor{keyword}{const}\ \&)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00131\ \ \ \ \ \};}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00138\ \ \ \ \ \textcolor{comment}{//std::shared\_ptr<common::Graph>\ parse(std::vector<common::Lexeme>\&\ input);}}
+\DoxyCodeLine{00139\ \ \ \ \ std::shared\_ptr<common::TraversalGraph>\ parse(std::vector<common::Lexeme>\&\ input);\ }
+\DoxyCodeLine{00140\ \}}
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ \textcolor{comment}{//\ \#pragma\ once}}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ \textcolor{comment}{//\ //\ standard}}
+\DoxyCodeLine{00151\ \textcolor{comment}{//\ \#include\ <cstdint>}}
+\DoxyCodeLine{00152\ \textcolor{comment}{//\ \#include\ <memory>}}
+\DoxyCodeLine{00153\ \textcolor{comment}{//\ \#include\ <string>}}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ \textcolor{comment}{//\ //\ internal}}
+\DoxyCodeLine{00156\ \textcolor{comment}{//\ \#include\ <common/action-\/queue.hpp>}}
+\DoxyCodeLine{00157\ \textcolor{comment}{//\ \#include\ <common/common.hpp>}}
+\DoxyCodeLine{00158\ \textcolor{comment}{//\ \#include\ <algorithms/traversal.hpp>}}
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00160\ \textcolor{comment}{//\ //\ contrib}}
+\DoxyCodeLine{00161\ \textcolor{comment}{//\ \#include\ <tinyfsm.hpp>}}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ \textcolor{comment}{//\ namespace\ parser\ \{}}
+\DoxyCodeLine{00165\ }
+\DoxyCodeLine{00166\ \textcolor{comment}{//\ //\ parser.hpp}}
+\DoxyCodeLine{00167\ }
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00169\ \ \ \ \ }
+\DoxyCodeLine{00170\ \textcolor{comment}{//\ \ \ \ \ inline\ void\ throw\_invalid\_input(std::string\ message)\ \{}}
+\DoxyCodeLine{00171\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ throw\ std::runtime\_error(message);}}
+\DoxyCodeLine{00172\ \textcolor{comment}{//\ \ \ \ \ \}}}
+\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00174\ \textcolor{comment}{//\ \ \ \ \ struct\ SharedState\ \{}}
+\DoxyCodeLine{00175\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ std::shared\_ptr<common::Graph>\ graph;}}
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ common::ActionQueue\ backoffQueue;}}
+\DoxyCodeLine{00178\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ common::ActionQueue\ actionQueue;}}
+\DoxyCodeLine{00179\ }
+\DoxyCodeLine{00180\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ std::string\ fromNodeId;}}
+\DoxyCodeLine{00181\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ std::string\ toNodeId;}}
+\DoxyCodeLine{00182\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ std::string\ label;}}
+\DoxyCodeLine{00183\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ std::string\ expectedValue;}}
+\DoxyCodeLine{00184\ }
+\DoxyCodeLine{00185\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ std::string\ currentAttr;\ //\ ←\ добавь\ это\ поле}}
+\DoxyCodeLine{00186\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ std::string\ key;}}
+\DoxyCodeLine{00187\ }
+\DoxyCodeLine{00188\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ std::uint8\_t\ flags\ =\ 0x0;}}
+\DoxyCodeLine{00189\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ int\ weight\ =\ -\/1;\ }}
+\DoxyCodeLine{00190\ \textcolor{comment}{//\ \ \ \ \ \};}}
+\DoxyCodeLine{00191\ }
+\DoxyCodeLine{00192\ }
+\DoxyCodeLine{00193\ }
+\DoxyCodeLine{00194\ }
+\DoxyCodeLine{00195\ \textcolor{comment}{//\ \ \ \ \ //\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00196\ \textcolor{comment}{//\ \ \ \ \ //\ 1.\ Event\ Declarations}}
+\DoxyCodeLine{00197\ \textcolor{comment}{//\ \ \ \ \ //}}
+\DoxyCodeLine{00198\ \textcolor{comment}{//\ \ \ \ \ struct\ GraphEvent\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ tinyfsm::Event\ \{\};}}
+\DoxyCodeLine{00199\ \textcolor{comment}{//\ \ \ \ \ struct\ InputOpenCurlyBracket\ \ \ \ :\ GraphEvent\ \{\};}}
+\DoxyCodeLine{00200\ \textcolor{comment}{//\ \ \ \ \ struct\ InputCloseCurlyBracket\ \ \ :\ GraphEvent\ \{\};}}
+\DoxyCodeLine{00201\ \textcolor{comment}{//\ \ \ \ \ struct\ InputOpenSquareBracket\ \ \ :\ GraphEvent\ \{\};}}
+\DoxyCodeLine{00202\ \textcolor{comment}{//\ \ \ \ \ struct\ InputCloseSquareBracket\ \ :\ GraphEvent\ \{\};}}
+\DoxyCodeLine{00203\ \textcolor{comment}{//\ \ \ \ \ struct\ InputEdge\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ GraphEvent\ \{\};}}
+\DoxyCodeLine{00204\ \textcolor{comment}{//\ \ \ \ \ struct\ InputLabel\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ GraphEvent\ \{\};}}
+\DoxyCodeLine{00205\ \textcolor{comment}{//\ \ \ \ \ struct\ InputEqual\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ GraphEvent\ \{\};}}
+\DoxyCodeLine{00206\ \textcolor{comment}{//\ \ \ \ \ struct\ InputGraphType\ \ \ \ \ \ \ \ \ \ \ :\ GraphEvent\ \{\ std::string\ graphType;\ \};}}
+\DoxyCodeLine{00207\ \textcolor{comment}{//\ \ \ \ \ struct\ InputNodeId\ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ GraphEvent\ \{\ std::string\ NodeID;\ \};}}
+\DoxyCodeLine{00208\ \textcolor{comment}{//\ \ \ \ \ struct\ InputStringValue\ \ \ \ \ \ \ \ \ :\ GraphEvent\ \{\ std::string\ label;\ \};}}
+\DoxyCodeLine{00209\ \textcolor{comment}{//\ \ \ \ \ struct\ InputIntValue\ \ \ \ \ \ \ \ \ \ \ \ :\ GraphEvent\ \{\ int\ weight;\ \};}}
+\DoxyCodeLine{00210\ }
+\DoxyCodeLine{00211\ }
+\DoxyCodeLine{00212\ \textcolor{comment}{//\ \ \ \ \ struct\ InputWeight\ \{\};\ //\ ADDED}}
+\DoxyCodeLine{00213\ }
+\DoxyCodeLine{00214\ \textcolor{comment}{//\ \ \ \ \ \ \ struct\ InputAttrKey\ :\ GraphEvent\ \{\ //-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00215\ \textcolor{comment}{//\ \ \ \ \ std::string\ key;}}
+\DoxyCodeLine{00216\ \textcolor{comment}{//\ \};}}
+\DoxyCodeLine{00217\ }
+\DoxyCodeLine{00218\ }
+\DoxyCodeLine{00219\ \textcolor{comment}{//\ \ \ \ \ //\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00220\ \textcolor{comment}{//\ \ \ \ \ //\ 2.\ State\ Machine\ Base\ Class\ Declaration}}
+\DoxyCodeLine{00221\ \textcolor{comment}{//\ \ \ \ \ //}}
+\DoxyCodeLine{00222\ \textcolor{comment}{//\ \ \ \ \ class\ LexemeParser\ :\ public\ tinyfsm::Fsm<LexemeParser>\ \{}}
+\DoxyCodeLine{00223\ \textcolor{comment}{//\ \ \ \ \ public:}}
+\DoxyCodeLine{00224\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ virtual\ void\ react(InputGraphType\ const\ \&)\ \ \ \ \ \ \ \ \ \ \{\};}}
+\DoxyCodeLine{00225\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ virtual\ void\ react(InputOpenCurlyBracket\ const\ \&)\ \ \ \{\ throw\_invalid\_input("{}"{});\ \};}}
+\DoxyCodeLine{00226\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ virtual\ void\ react(InputCloseCurlyBracket\ const\ \&)\ \ \{\ throw\_invalid\_input("{}"{});\ \};}}
+\DoxyCodeLine{00227\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ virtual\ void\ react(InputNodeId\ const\ \&)\ \ \ \ \ \ \ \ \ \ \ \ \ \{\ throw\_invalid\_input("{}"{});\ \};}}
+\DoxyCodeLine{00228\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ virtual\ void\ react(InputOpenSquareBracket\ const\ \&)\ \ \{\ throw\_invalid\_input("{}"{});\ \};}}
+\DoxyCodeLine{00229\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ virtual\ void\ react(InputCloseSquareBracket\ const\ \&)\ \{\ throw\_invalid\_input("{}"{});\ \};}}
+\DoxyCodeLine{00230\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ virtual\ void\ react(InputEdge\ const\ \&)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ throw\_invalid\_input("{}"{});\ \};}}
+\DoxyCodeLine{00231\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ virtual\ void\ react(InputLabel\ const\ \&)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ throw\_invalid\_input("{}"{});\ \};}}
+\DoxyCodeLine{00232\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ virtual\ void\ react(InputEqual\ const\ \&)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ throw\_invalid\_input("{}"{});\ \};}}
+\DoxyCodeLine{00233\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ virtual\ void\ react(InputStringValue\ const\ \&)\ \ \ \ \ \ \ \ \{\ throw\_invalid\_input("{}"{});\ \};}}
+\DoxyCodeLine{00234\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ virtual\ void\ react(InputIntValue\ const\ \&)\ \ \ \ \ \ \ \ \ \ \ \{\ throw\_invalid\_input("{}"{});\ \};}}
+\DoxyCodeLine{00235\ }
+\DoxyCodeLine{00236\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ virtual\ void\ react(InputAttrKey\ const\ \&)\ \{}}
+\DoxyCodeLine{00237\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ throw\_invalid\_input("{}Unexpected\ InputAttrKey"{});}}
+\DoxyCodeLine{00238\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \}}}
+\DoxyCodeLine{00239\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ virtual\ void\ react(InputWeight\ const\ \&)\ \{}}
+\DoxyCodeLine{00240\ \textcolor{comment}{//\ \ \ \ \ \ \ \ throw\_invalid\_input("{}Unexpected\ input\ of\ type\ InputWeight"{});}}
+\DoxyCodeLine{00241\ \textcolor{comment}{//\ \ \ \ \}}}
+\DoxyCodeLine{00242\ }
+\DoxyCodeLine{00243\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ //\ void\ react(InputAttrKey\ const\ \&)\ override;}}
+\DoxyCodeLine{00244\ }
+\DoxyCodeLine{00245\ }
+\DoxyCodeLine{00246\ }
+\DoxyCodeLine{00247\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ static\ void\ reset();}}
+\DoxyCodeLine{00248\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ void\ entry();\ \ /*\ entry\ actions\ in\ some\ states\ */}}
+\DoxyCodeLine{00249\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ void\ exit();\ \ /*\ no\ exit\ actions\ */}}
+\DoxyCodeLine{00250\ \ \ \ \ }
+\DoxyCodeLine{00251\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ friend\ std::shared\_ptr<common::TraversalGraph>\ parse(std::vector<common::Lexeme>\&\ input);}}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00253\ \ }
+\DoxyCodeLine{00254\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ inline\ static\ SharedState\ shared\ \{\};}}
+\DoxyCodeLine{00255\ \textcolor{comment}{//\ \ \ \ \ \};}}
+\DoxyCodeLine{00256\ }
+\DoxyCodeLine{00257\ }
+\DoxyCodeLine{00258\ \textcolor{comment}{//\ \ \ \ \ //\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00259\ \textcolor{comment}{//\ \ \ \ \ //\ 3.\ State\ Declarations}}
+\DoxyCodeLine{00260\ }
+\DoxyCodeLine{00261\ \textcolor{comment}{//\ //\ Добавляем\ новые\ состояния\ для\ разбора\ атрибутов}}
+\DoxyCodeLine{00262\ \textcolor{comment}{//\ struct\ Attributes\ :\ public\ LexemeParser\ \{}}
+\DoxyCodeLine{00263\ \textcolor{comment}{//\ \ \ \ \ void\ react(InputAttrKey\ const\ \&event);}}
+\DoxyCodeLine{00264\ \textcolor{comment}{//\ \ \ \ \ void\ react(InputEqual\ const\ \&event);}}
+\DoxyCodeLine{00265\ \textcolor{comment}{//\ \ \ \ \ void\ react(InputCloseSquareBracket\ const\ \&event);}}
+\DoxyCodeLine{00266\ \textcolor{comment}{//\ \};}}
+\DoxyCodeLine{00267\ }
+\DoxyCodeLine{00268\ \textcolor{comment}{//\ struct\ AttrValue\ :\ public\ LexemeParser\ \{}}
+\DoxyCodeLine{00269\ \textcolor{comment}{//\ \ \ \ \ void\ react(InputStringValue\ const\ \&event);}}
+\DoxyCodeLine{00270\ \textcolor{comment}{//\ \ \ \ \ void\ react(InputIntValue\ const\ \&event);}}
+\DoxyCodeLine{00271\ \textcolor{comment}{//\ \};}}
+\DoxyCodeLine{00272\ }
+\DoxyCodeLine{00273\ }
+\DoxyCodeLine{00274\ }
+\DoxyCodeLine{00275\ }
+\DoxyCodeLine{00276\ }
+\DoxyCodeLine{00277\ }
+\DoxyCodeLine{00278\ }
+\DoxyCodeLine{00279\ \textcolor{comment}{//\ \ \ \ \ class\ Idle\ :\ public\ LexemeParser\ \{}}
+\DoxyCodeLine{00280\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ void\ react(InputGraphType\ const\ \&)\ override;}}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00282\ \textcolor{comment}{//\ \ \ \ \ \};}}
+\DoxyCodeLine{00283\ }
+\DoxyCodeLine{00284\ \textcolor{comment}{//\ \ \ \ \ class\ GraphType\ :\ public\ LexemeParser\ \{}}
+\DoxyCodeLine{00285\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ void\ react(InputOpenCurlyBracket\ const\ \&)\ override;}}
+\DoxyCodeLine{00286\ \textcolor{comment}{//\ \ \ \ \ \};}}
+\DoxyCodeLine{00287\ }
+\DoxyCodeLine{00288\ \textcolor{comment}{//\ \ \ \ \ class\ OpenCurlyBracket\ :\ public\ LexemeParser\ \{}}
+\DoxyCodeLine{00289\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ void\ react(InputNodeId\ const\ \&)\ override;}}
+\DoxyCodeLine{00290\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ void\ react(InputCloseCurlyBracket\ const\ \&)\ override;}}
+\DoxyCodeLine{00291\ \textcolor{comment}{//\ \ \ \ \ \};}}
+\DoxyCodeLine{00292\ }
+\DoxyCodeLine{00293\ \textcolor{comment}{//\ \ \ \ \ class\ FromNodeID\ :\ public\ LexemeParser\ \{}}
+\DoxyCodeLine{00294\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ void\ react(InputCloseCurlyBracket\ const\&)\ override;}}
+\DoxyCodeLine{00295\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ void\ react(InputOpenSquareBracket\ const\&)\ override;}}
+\DoxyCodeLine{00296\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ void\ react(InputEdge\ const\&)\ override;}}
+\DoxyCodeLine{00297\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ void\ react(InputNodeId\ const\&)\ override;}}
+\DoxyCodeLine{00298\ \textcolor{comment}{//\ \ \ \ \ \};}}
+\DoxyCodeLine{00299\ }
+\DoxyCodeLine{00300\ \textcolor{comment}{//\ \ \ \ \ \ \ \ class\ OpenSquareBracket\ :\ public\ LexemeParser\ \{}}
+\DoxyCodeLine{00301\ \textcolor{comment}{//\ \ \ \ public:}}
+\DoxyCodeLine{00302\ \textcolor{comment}{//\ \ \ \ \ \ \ \ //\ Убедитесь,\ что\ здесь\ объявлены\ все\ нужные\ методы}}
+\DoxyCodeLine{00303\ \textcolor{comment}{//\ \ \ \ \ \ \ \ void\ react(InputLabel\ const\ \&)\ override;\ //\ для\ InputLabel}}
+\DoxyCodeLine{00304\ \textcolor{comment}{//\ \ \ \ \ \ \ \ void\ react(InputWeight\ const\ \&)\ override;\ //\ для\ InputWeight}}
+\DoxyCodeLine{00305\ \textcolor{comment}{//\ \ \ \ \ \ \ \ void\ react(InputAttrKey\ const\ \&)\ override;\ //\ для\ InputAttrKey,\ если\ этот\ метод\ необходим}}
+\DoxyCodeLine{00306\ \textcolor{comment}{//\ \ \ \ \};}}
+\DoxyCodeLine{00307\ }
+\DoxyCodeLine{00308\ }
+\DoxyCodeLine{00309\ \textcolor{comment}{//\ \ \ \ \ class\ Edge\ :\ public\ LexemeParser\ \{}}
+\DoxyCodeLine{00310\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ void\ react(InputNodeId\ const\ \&)\ override;}}
+\DoxyCodeLine{00311\ \textcolor{comment}{//\ \ \ \ \ \};}}
+\DoxyCodeLine{00312\ }
+\DoxyCodeLine{00313\ \textcolor{comment}{//\ \ \ \ \ class\ ToNodeID\ :\ public\ LexemeParser\ \{}}
+\DoxyCodeLine{00314\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ void\ react(InputOpenSquareBracket\ const\ \&)\ override;}}
+\DoxyCodeLine{00315\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ void\ react(InputNodeId\ const\&\ )\ override;}}
+\DoxyCodeLine{00316\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ void\ react(InputCloseCurlyBracket\ const\&)\ override;}}
+\DoxyCodeLine{00317\ \textcolor{comment}{//\ \ \ \ \ \};}}
+\DoxyCodeLine{00318\ }
+\DoxyCodeLine{00319\ \textcolor{comment}{//\ \ \ \ \ class\ Label\ :\ public\ LexemeParser\ \{}}
+\DoxyCodeLine{00320\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ void\ react(InputEqual\ const\ \&)\ override;}}
+\DoxyCodeLine{00321\ \textcolor{comment}{//\ \ \ \ \ \};}}
+\DoxyCodeLine{00322\ }
+\DoxyCodeLine{00323\ \textcolor{comment}{//\ \ \ \ \ class\ Equal\ :\ public\ LexemeParser\ \{}}
+\DoxyCodeLine{00324\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ void\ react(InputStringValue\ const\ \&)\ override;}}
+\DoxyCodeLine{00325\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ void\ react(InputIntValue\ const\ \&)\ override;}}
+\DoxyCodeLine{00326\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ void\ react(InputEqual\ const\ \&)\ override;}}
+\DoxyCodeLine{00327\ }
+\DoxyCodeLine{00328\ \textcolor{comment}{//\ \ \ \ \ \};}}
+\DoxyCodeLine{00329\ }
+\DoxyCodeLine{00330\ \textcolor{comment}{//\ \ \ \ \ class\ Value\ :\ public\ LexemeParser\ \{}}
+\DoxyCodeLine{00331\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ void\ react(InputCloseSquareBracket\ const\ \&)\ override;}}
+\DoxyCodeLine{00332\ \textcolor{comment}{//\ \ \ \ \ \};}}
+\DoxyCodeLine{00333\ }
+\DoxyCodeLine{00334\ \textcolor{comment}{//\ \ \ \ \ /**}}
+\DoxyCodeLine{00335\ \textcolor{comment}{//\ \ \ \ \ \ *\ @brief\ Parse\ lexemes\ vector\ into\ graph\ object}}
+\DoxyCodeLine{00336\ \textcolor{comment}{//\ \ \ \ \ \ *\ @param\ input\ lexemes}}
+\DoxyCodeLine{00337\ \textcolor{comment}{//\ \ \ \ \ \ *\ @return\ std::shared\_ptr<common::Graph>\ output\ object\ }}
+\DoxyCodeLine{00338\ \textcolor{comment}{//\ \ \ \ \ \ */}}
+\DoxyCodeLine{00339\ \textcolor{comment}{//\ \ \ \ \ //std::shared\_ptr<common::Graph>\ parse(std::vector<common::Lexeme>\&\ input);}}
+\DoxyCodeLine{00340\ \textcolor{comment}{//\ \ \ \ \ std::shared\_ptr<common::TraversalGraph>\ parse(std::vector<common::Lexeme>\&\ input);\ }}
+\DoxyCodeLine{00341\ \textcolor{comment}{//\ \}}}
+\DoxyCodeLine{00342\ }
+\DoxyCodeLine{00343\ \textcolor{comment}{//\ \#pragma\ once}}
+\DoxyCodeLine{00344\ }
+\DoxyCodeLine{00345\ \textcolor{comment}{//\ //\ standard}}
+\DoxyCodeLine{00346\ \textcolor{comment}{//\ \#include\ <cstdint>}}
+\DoxyCodeLine{00347\ \textcolor{comment}{//\ \#include\ <memory>}}
+\DoxyCodeLine{00348\ \textcolor{comment}{//\ \#include\ <string>}}
+\DoxyCodeLine{00349\ }
+\DoxyCodeLine{00350\ \textcolor{comment}{//\ //\ internal}}
+\DoxyCodeLine{00351\ \textcolor{comment}{//\ \#include\ <common/action-\/queue.hpp>}}
+\DoxyCodeLine{00352\ \textcolor{comment}{//\ \#include\ <common/common.hpp>}}
+\DoxyCodeLine{00353\ \textcolor{comment}{//\ \#include\ <algorithms/traversal.hpp>}}
+\DoxyCodeLine{00354\ }
+\DoxyCodeLine{00355\ \textcolor{comment}{//\ //\ contrib}}
+\DoxyCodeLine{00356\ \textcolor{comment}{//\ \#include\ <tinyfsm.hpp>}}
+\DoxyCodeLine{00357\ }
+\DoxyCodeLine{00358\ \textcolor{comment}{//\ namespace\ parser\ \{}}
+\DoxyCodeLine{00359\ }
+\DoxyCodeLine{00360\ \textcolor{comment}{//\ //\ parser.hpp}}
+\DoxyCodeLine{00361\ }
+\DoxyCodeLine{00362\ \textcolor{comment}{//\ inline\ void\ throw\_invalid\_input(std::string\ message)\ \{}}
+\DoxyCodeLine{00363\ \textcolor{comment}{//\ \ \ \ \ throw\ std::runtime\_error(message);}}
+\DoxyCodeLine{00364\ \textcolor{comment}{//\ \}}}
+\DoxyCodeLine{00365\ }
+\DoxyCodeLine{00366\ \textcolor{comment}{//\ struct\ SharedState\ \{}}
+\DoxyCodeLine{00367\ \textcolor{comment}{//\ \ \ \ \ std::shared\_ptr<common::Graph>\ graph;}}
+\DoxyCodeLine{00368\ }
+\DoxyCodeLine{00369\ \textcolor{comment}{//\ \ \ \ \ common::ActionQueue\ backoffQueue;}}
+\DoxyCodeLine{00370\ \textcolor{comment}{//\ \ \ \ \ common::ActionQueue\ actionQueue;}}
+\DoxyCodeLine{00371\ }
+\DoxyCodeLine{00372\ \textcolor{comment}{//\ \ \ \ \ std::string\ fromNodeId;}}
+\DoxyCodeLine{00373\ \textcolor{comment}{//\ \ \ \ \ std::string\ toNodeId;}}
+\DoxyCodeLine{00374\ }
+\DoxyCodeLine{00375\ \textcolor{comment}{//\ \ \ \ \ std::string\ label;}}
+\DoxyCodeLine{00376\ \textcolor{comment}{//\ \ \ \ \ bool\ hasLabel\ =\ false;}}
+\DoxyCodeLine{00377\ }
+\DoxyCodeLine{00378\ \textcolor{comment}{//\ \ \ \ \ int\ weight\ =\ 1;}}
+\DoxyCodeLine{00379\ \textcolor{comment}{//\ \ \ \ \ bool\ hasWeight\ =\ false;}}
+\DoxyCodeLine{00380\ }
+\DoxyCodeLine{00381\ \textcolor{comment}{//\ \ \ \ \ std::string\ expectedValue;}}
+\DoxyCodeLine{00382\ \textcolor{comment}{//\ \ \ \ \ std::string\ currentAttr;\ //\ новое\ поле\ для\ текущего\ ключа\ атрибута}}
+\DoxyCodeLine{00383\ \textcolor{comment}{//\ \ \ \ \ std::string\ key;}}
+\DoxyCodeLine{00384\ }
+\DoxyCodeLine{00385\ \textcolor{comment}{//\ \ \ \ \ std::uint8\_t\ flags\ =\ 0x0;}}
+\DoxyCodeLine{00386\ \textcolor{comment}{//\ \};}}
+\DoxyCodeLine{00387\ }
+\DoxyCodeLine{00388\ \textcolor{comment}{//\ //\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00389\ \textcolor{comment}{//\ //\ 1.\ Event\ Declarations}}
+\DoxyCodeLine{00390\ \textcolor{comment}{//\ //}}
+\DoxyCodeLine{00391\ \textcolor{comment}{//\ struct\ GraphEvent\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ tinyfsm::Event\ \{\};}}
+\DoxyCodeLine{00392\ \textcolor{comment}{//\ struct\ InputOpenCurlyBracket\ \ \ \ :\ GraphEvent\ \{\};}}
+\DoxyCodeLine{00393\ \textcolor{comment}{//\ struct\ InputCloseCurlyBracket\ \ \ :\ GraphEvent\ \{\};}}
+\DoxyCodeLine{00394\ \textcolor{comment}{//\ struct\ InputOpenSquareBracket\ \ \ :\ GraphEvent\ \{\};}}
+\DoxyCodeLine{00395\ \textcolor{comment}{//\ struct\ InputCloseSquareBracket\ \ :\ GraphEvent\ \{\};}}
+\DoxyCodeLine{00396\ \textcolor{comment}{//\ struct\ InputEdge\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ GraphEvent\ \{\};}}
+\DoxyCodeLine{00397\ \textcolor{comment}{//\ struct\ InputLabel\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ GraphEvent\ \{\ std::string\ label;\ \};}}
+\DoxyCodeLine{00398\ \textcolor{comment}{//\ struct\ InputEqual\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ GraphEvent\ \{\};}}
+\DoxyCodeLine{00399\ \textcolor{comment}{//\ struct\ InputGraphType\ \ \ \ \ \ \ \ \ \ \ :\ GraphEvent\ \{\ std::string\ graphType;\ \};}}
+\DoxyCodeLine{00400\ \textcolor{comment}{//\ struct\ InputNodeId\ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ GraphEvent\ \{\ std::string\ NodeID;\ \};}}
+\DoxyCodeLine{00401\ \textcolor{comment}{//\ struct\ InputStringValue\ \ \ \ \ \ \ \ \ :\ GraphEvent\ \{\ std::string\ label;\ \};}}
+\DoxyCodeLine{00402\ \textcolor{comment}{//\ struct\ InputIntValue\ \ \ \ \ \ \ \ \ \ \ \ :\ GraphEvent\ \{\ int\ weight;\ \};}}
+\DoxyCodeLine{00403\ }
+\DoxyCodeLine{00404\ \textcolor{comment}{//\ struct\ InputWeight\ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ GraphEvent\ \{\ int\ weight;\ \};\ //\ добавлено}}
+\DoxyCodeLine{00405\ }
+\DoxyCodeLine{00406\ \textcolor{comment}{//\ struct\ InputAttrKey\ \ \ \ \ \ \ \ \ \ \ \ \ :\ GraphEvent\ \{\ std::string\ key;\ \};\ //\ добавлено}}
+\DoxyCodeLine{00407\ }
+\DoxyCodeLine{00408\ \textcolor{comment}{//\ //\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00409\ \textcolor{comment}{//\ //\ 2.\ State\ Machine\ Base\ Class\ Declaration}}
+\DoxyCodeLine{00410\ \textcolor{comment}{//\ //}}
+\DoxyCodeLine{00411\ \textcolor{comment}{//\ class\ LexemeParser\ :\ public\ tinyfsm::Fsm<LexemeParser>\ \{}}
+\DoxyCodeLine{00412\ \textcolor{comment}{//\ public:}}
+\DoxyCodeLine{00413\ \textcolor{comment}{//\ \ \ \ \ virtual\ void\ react(InputGraphType\ const\ \&)\ \ \ \ \ \ \ \ \ \ \{\};}}
+\DoxyCodeLine{00414\ \textcolor{comment}{//\ \ \ \ \ virtual\ void\ react(InputOpenCurlyBracket\ const\ \&)\ \ \ \{\ throw\_invalid\_input("{}"{});\ \};}}
+\DoxyCodeLine{00415\ \textcolor{comment}{//\ \ \ \ \ virtual\ void\ react(InputCloseCurlyBracket\ const\ \&)\ \ \{\ throw\_invalid\_input("{}"{});\ \};}}
+\DoxyCodeLine{00416\ \textcolor{comment}{//\ \ \ \ \ virtual\ void\ react(InputNodeId\ const\ \&)\ \ \ \ \ \ \ \ \ \ \ \ \ \{\ throw\_invalid\_input("{}"{});\ \};}}
+\DoxyCodeLine{00417\ \textcolor{comment}{//\ \ \ \ \ virtual\ void\ react(InputOpenSquareBracket\ const\ \&)\ \ \{\ throw\_invalid\_input("{}"{});\ \};}}
+\DoxyCodeLine{00418\ \textcolor{comment}{//\ \ \ \ \ virtual\ void\ react(InputCloseSquareBracket\ const\ \&)\ \{\ throw\_invalid\_input("{}"{});\ \};}}
+\DoxyCodeLine{00419\ \textcolor{comment}{//\ \ \ \ \ virtual\ void\ react(InputEdge\ const\ \&)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ throw\_invalid\_input("{}"{});\ \};}}
+\DoxyCodeLine{00420\ \textcolor{comment}{//\ \ \ \ \ virtual\ void\ react(InputLabel\ const\ \&)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ throw\_invalid\_input("{}"{});\ \};}}
+\DoxyCodeLine{00421\ \textcolor{comment}{//\ \ \ \ \ virtual\ void\ react(InputEqual\ const\ \&)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ throw\_invalid\_input("{}"{});\ \};}}
+\DoxyCodeLine{00422\ \textcolor{comment}{//\ \ \ \ \ virtual\ void\ react(InputStringValue\ const\ \&)\ \ \ \ \ \ \ \ \{\ throw\_invalid\_input("{}"{});\ \};}}
+\DoxyCodeLine{00423\ \textcolor{comment}{//\ \ \ \ \ virtual\ void\ react(InputIntValue\ const\ \&)\ \ \ \ \ \ \ \ \ \ \ \{\ throw\_invalid\_input("{}"{});\ \};}}
+\DoxyCodeLine{00424\ }
+\DoxyCodeLine{00425\ \textcolor{comment}{//\ \ \ \ \ virtual\ void\ react(InputAttrKey\ const\ \&)\ \{}}
+\DoxyCodeLine{00426\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ throw\_invalid\_input("{}Unexpected\ InputAttrKey"{});}}
+\DoxyCodeLine{00427\ \textcolor{comment}{//\ \ \ \ \ \}}}
+\DoxyCodeLine{00428\ }
+\DoxyCodeLine{00429\ \textcolor{comment}{//\ \ \ \ \ virtual\ void\ react(InputWeight\ const\ \&)\ \{}}
+\DoxyCodeLine{00430\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ throw\_invalid\_input("{}Unexpected\ input\ of\ type\ InputWeight"{});}}
+\DoxyCodeLine{00431\ \textcolor{comment}{//\ \ \ \ \ \}}}
+\DoxyCodeLine{00432\ }
+\DoxyCodeLine{00433\ \textcolor{comment}{//\ \ \ \ \ static\ void\ reset();}}
+\DoxyCodeLine{00434\ \textcolor{comment}{//\ \ \ \ \ void\ entry();\ \ /*\ entry\ actions\ in\ some\ states\ */}}
+\DoxyCodeLine{00435\ \textcolor{comment}{//\ \ \ \ \ void\ exit();\ \ \ /*\ no\ exit\ actions\ */}}
+\DoxyCodeLine{00436\ }
+\DoxyCodeLine{00437\ \textcolor{comment}{//\ \ \ \ \ friend\ std::shared\_ptr<common::TraversalGraph>\ parse(std::vector<common::Lexeme>\&\ input);}}
+\DoxyCodeLine{00438\ }
+\DoxyCodeLine{00439\ \textcolor{comment}{//\ \ \ \ \ inline\ static\ SharedState\ shared\ \{\};}}
+\DoxyCodeLine{00440\ \textcolor{comment}{//\ \};}}
+\DoxyCodeLine{00441\ }
+\DoxyCodeLine{00442\ \textcolor{comment}{//\ //\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00443\ \textcolor{comment}{//\ //\ 3.\ State\ Declarations}}
+\DoxyCodeLine{00444\ }
+\DoxyCodeLine{00445\ \textcolor{comment}{//\ //\ Новые\ состояния\ для\ разбора\ атрибутов}}
+\DoxyCodeLine{00446\ \textcolor{comment}{//\ struct\ Attributes\ :\ public\ LexemeParser\ \{}}
+\DoxyCodeLine{00447\ \textcolor{comment}{//\ \ \ \ \ void\ react(InputAttrKey\ const\ \&event);}}
+\DoxyCodeLine{00448\ \textcolor{comment}{//\ \ \ \ \ void\ react(InputEqual\ const\ \&event);}}
+\DoxyCodeLine{00449\ \textcolor{comment}{//\ \ \ \ \ void\ react(InputCloseSquareBracket\ const\ \&event);}}
+\DoxyCodeLine{00450\ \textcolor{comment}{//\ \};}}
+\DoxyCodeLine{00451\ }
+\DoxyCodeLine{00452\ \textcolor{comment}{//\ struct\ AttrValue\ :\ public\ LexemeParser\ \{}}
+\DoxyCodeLine{00453\ \textcolor{comment}{//\ \ \ \ \ void\ react(InputStringValue\ const\ \&event);}}
+\DoxyCodeLine{00454\ \textcolor{comment}{//\ \ \ \ \ void\ react(InputIntValue\ const\ \&event);}}
+\DoxyCodeLine{00455\ \textcolor{comment}{//\ \};}}
+\DoxyCodeLine{00456\ }
+\DoxyCodeLine{00457\ \textcolor{comment}{//\ //\ Состояния\ парсера\ для\ других\ частей\ графа}}
+\DoxyCodeLine{00458\ \textcolor{comment}{//\ class\ Idle\ :\ public\ LexemeParser\ \{}}
+\DoxyCodeLine{00459\ \textcolor{comment}{//\ \ \ \ \ void\ react(InputGraphType\ const\ \&)\ override;}}
+\DoxyCodeLine{00460\ \textcolor{comment}{//\ \};}}
+\DoxyCodeLine{00461\ }
+\DoxyCodeLine{00462\ \textcolor{comment}{//\ class\ GraphType\ :\ public\ LexemeParser\ \{}}
+\DoxyCodeLine{00463\ \textcolor{comment}{//\ \ \ \ \ void\ react(InputOpenCurlyBracket\ const\ \&)\ override;}}
+\DoxyCodeLine{00464\ \textcolor{comment}{//\ \};}}
+\DoxyCodeLine{00465\ }
+\DoxyCodeLine{00466\ \textcolor{comment}{//\ class\ OpenCurlyBracket\ :\ public\ LexemeParser\ \{}}
+\DoxyCodeLine{00467\ \textcolor{comment}{//\ \ \ \ \ void\ react(InputNodeId\ const\ \&)\ override;}}
+\DoxyCodeLine{00468\ \textcolor{comment}{//\ \ \ \ \ void\ react(InputCloseCurlyBracket\ const\ \&)\ override;}}
+\DoxyCodeLine{00469\ \textcolor{comment}{//\ \};}}
+\DoxyCodeLine{00470\ }
+\DoxyCodeLine{00471\ \textcolor{comment}{//\ class\ FromNodeID\ :\ public\ LexemeParser\ \{}}
+\DoxyCodeLine{00472\ \textcolor{comment}{//\ \ \ \ \ void\ react(InputCloseCurlyBracket\ const\&)\ override;}}
+\DoxyCodeLine{00473\ \textcolor{comment}{//\ \ \ \ \ void\ react(InputOpenSquareBracket\ const\&)\ override;}}
+\DoxyCodeLine{00474\ \textcolor{comment}{//\ \ \ \ \ void\ react(InputEdge\ const\&)\ override;}}
+\DoxyCodeLine{00475\ \textcolor{comment}{//\ \ \ \ \ void\ react(InputNodeId\ const\&)\ override;}}
+\DoxyCodeLine{00476\ \textcolor{comment}{//\ \};}}
+\DoxyCodeLine{00477\ }
+\DoxyCodeLine{00478\ \textcolor{comment}{//\ class\ OpenSquareBracket\ :\ public\ LexemeParser\ \{}}
+\DoxyCodeLine{00479\ \textcolor{comment}{//\ public:}}
+\DoxyCodeLine{00480\ \textcolor{comment}{//\ \ \ \ \ void\ react(InputLabel\ const\ \&)\ override;}}
+\DoxyCodeLine{00481\ \textcolor{comment}{//\ \ \ \ \ void\ react(InputWeight\ const\ \&)\ override;}}
+\DoxyCodeLine{00482\ \textcolor{comment}{//\ \ \ \ \ void\ react(InputAttrKey\ const\ \&)\ override;}}
+\DoxyCodeLine{00483\ \textcolor{comment}{//\ \};}}
+\DoxyCodeLine{00484\ }
+\DoxyCodeLine{00485\ \textcolor{comment}{//\ class\ Edge\ :\ public\ LexemeParser\ \{}}
+\DoxyCodeLine{00486\ \textcolor{comment}{//\ \ \ \ \ void\ react(InputNodeId\ const\ \&)\ override;}}
+\DoxyCodeLine{00487\ \textcolor{comment}{//\ \};}}
+\DoxyCodeLine{00488\ }
+\DoxyCodeLine{00489\ \textcolor{comment}{//\ class\ ToNodeID\ :\ public\ LexemeParser\ \{}}
+\DoxyCodeLine{00490\ \textcolor{comment}{//\ \ \ \ \ void\ react(InputOpenSquareBracket\ const\ \&)\ override;}}
+\DoxyCodeLine{00491\ \textcolor{comment}{//\ \ \ \ \ void\ react(InputNodeId\ const\&\ )\ override;}}
+\DoxyCodeLine{00492\ \textcolor{comment}{//\ \ \ \ \ void\ react(InputCloseCurlyBracket\ const\&)\ override;}}
+\DoxyCodeLine{00493\ \textcolor{comment}{//\ \};}}
+\DoxyCodeLine{00494\ }
+\DoxyCodeLine{00495\ \textcolor{comment}{//\ class\ Label\ :\ public\ LexemeParser\ \{}}
+\DoxyCodeLine{00496\ \textcolor{comment}{//\ \ \ \ \ void\ react(InputEqual\ const\ \&)\ override;}}
+\DoxyCodeLine{00497\ \textcolor{comment}{//\ \};}}
+\DoxyCodeLine{00498\ }
+\DoxyCodeLine{00499\ \textcolor{comment}{//\ class\ Equal\ :\ public\ LexemeParser\ \{}}
+\DoxyCodeLine{00500\ \textcolor{comment}{//\ \ \ \ \ void\ react(InputStringValue\ const\ \&)\ override;}}
+\DoxyCodeLine{00501\ \textcolor{comment}{//\ \ \ \ \ void\ react(InputIntValue\ const\ \&)\ override;}}
+\DoxyCodeLine{00502\ \textcolor{comment}{//\ \ \ \ \ void\ react(InputEqual\ const\ \&)\ override;}}
+\DoxyCodeLine{00503\ \textcolor{comment}{//\ \};}}
+\DoxyCodeLine{00504\ }
+\DoxyCodeLine{00505\ \textcolor{comment}{//\ class\ Value\ :\ public\ LexemeParser\ \{}}
+\DoxyCodeLine{00506\ \textcolor{comment}{//\ \ \ \ \ void\ react(InputCloseSquareBracket\ const\ \&)\ override;}}
+\DoxyCodeLine{00507\ \textcolor{comment}{//\ \};}}
+\DoxyCodeLine{00508\ }
+\DoxyCodeLine{00509\ \textcolor{comment}{//\ /**}}
+\DoxyCodeLine{00510\ \textcolor{comment}{//\ \ *\ @brief\ Parse\ lexemes\ vector\ into\ graph\ object}}
+\DoxyCodeLine{00511\ \textcolor{comment}{//\ \ *\ @param\ input\ lexemes}}
+\DoxyCodeLine{00512\ \textcolor{comment}{//\ \ *\ @return\ std::shared\_ptr<common::TraversalGraph>\ output\ object\ }}
+\DoxyCodeLine{00513\ \textcolor{comment}{//\ \ */}}
+\DoxyCodeLine{00514\ \textcolor{comment}{//\ std::shared\_ptr<common::TraversalGraph>\ parse(std::vector<common::Lexeme>\&\ input);}}
+\DoxyCodeLine{00515\ }
+\DoxyCodeLine{00516\ \textcolor{comment}{//\ \}\ //\ namespace\ parser}}
+
+\end{DoxyCode}

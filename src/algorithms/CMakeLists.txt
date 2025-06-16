@@ -8,3 +8,4 @@ set(HEADERS traversal.hpp)
 add_library(algorithms STATIC ${SOURCES} ${HEADERS})
 
 target_include_directories(algorithms PUBLIC ${SRC_ROOT})
+target_link_libraries(tests PRIVATE utils)

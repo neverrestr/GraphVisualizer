@@ -1,0 +1,91 @@
+\doxysection{common\+::Graph\+Dumping\+Factory Class Reference}
+\hypertarget{classcommon_1_1_graph_dumping_factory}{}\label{classcommon_1_1_graph_dumping_factory}\index{common::GraphDumpingFactory@{common::GraphDumpingFactory}}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structcommon_1_1_graph_dumping_factory_1_1_settings}{Settings}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcommon_1_1_graph_dumping_factory_a97a156b25ed33ff5b5f57555d1feeef3}{Graph\+Dumping\+Factory}} (\mbox{\hyperlink{structcommon_1_1_graph_dumping_factory_1_1_settings}{Settings}} settings) noexcept
+\begin{DoxyCompactList}\small\item\em Construct a new graph dumping factory. \end{DoxyCompactList}\item 
+\Hypertarget{classcommon_1_1_graph_dumping_factory_a77dc496affa4264d7f2145ae2fdb9ab8}\label{classcommon_1_1_graph_dumping_factory_a77dc496affa4264d7f2145ae2fdb9ab8} 
+{\bfseries Graph\+Dumping\+Factory} (\mbox{\hyperlink{classcommon_1_1_graph_dumping_factory}{Graph\+Dumping\+Factory}} \&\&) noexcept=default
+\item 
+\Hypertarget{classcommon_1_1_graph_dumping_factory_a202c281d5b55075f97c37dc198da9199}\label{classcommon_1_1_graph_dumping_factory_a202c281d5b55075f97c37dc198da9199} 
+{\bfseries Graph\+Dumping\+Factory} (const \mbox{\hyperlink{classcommon_1_1_graph_dumping_factory}{Graph\+Dumping\+Factory}} \&)=delete
+\item 
+void \mbox{\hyperlink{classcommon_1_1_graph_dumping_factory_af2a10754237f8077885c16d85848a1be}{dump\+One}} (const \mbox{\hyperlink{classcommon_1_1_graph}{Graph}} \&one, std\+::string\+\_\+view filename)
+\begin{DoxyCompactList}\small\item\em Dumps single graph to a file. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcommon_1_1_graph_dumping_factory_ac8ed6b3c019bf5de98c805aefd77ccdf}\label{classcommon_1_1_graph_dumping_factory_ac8ed6b3c019bf5de98c805aefd77ccdf} 
+void {\bfseries dump\+Graph\+Metadata} (const \mbox{\hyperlink{classcommon_1_1_graph}{Graph}} \&unit)
+\item 
+\Hypertarget{classcommon_1_1_graph_dumping_factory_aff86bdce5b7659fe0e904b91e82afd63}\label{classcommon_1_1_graph_dumping_factory_aff86bdce5b7659fe0e904b91e82afd63} 
+void {\bfseries dump\+Graph\+Nodes} (const \mbox{\hyperlink{classcommon_1_1_graph}{Graph}} \&unit)
+\item 
+\Hypertarget{classcommon_1_1_graph_dumping_factory_a50f559b3f4cf46cd19f98cb9825569a6}\label{classcommon_1_1_graph_dumping_factory_a50f559b3f4cf46cd19f98cb9825569a6} 
+void {\bfseries dump\+Graph\+Edges} (const \mbox{\hyperlink{classcommon_1_1_graph}{Graph}} \&unit)
+\item 
+\Hypertarget{classcommon_1_1_graph_dumping_factory_ab4648015c383c7553984f9388a9d15d1}\label{classcommon_1_1_graph_dumping_factory_ab4648015c383c7553984f9388a9d15d1} 
+void {\bfseries trail} (const \mbox{\hyperlink{classcommon_1_1_graph}{Graph}} \&unit)
+\item 
+\Hypertarget{classcommon_1_1_graph_dumping_factory_af57ab6189a96d538f4a361492511817d}\label{classcommon_1_1_graph_dumping_factory_af57ab6189a96d538f4a361492511817d} 
+void {\bfseries error} (const std\+::string \&message)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcommon_1_1_graph_dumping_factory_a193874e316c6c7f06e8fee5dec87a7e7}\label{classcommon_1_1_graph_dumping_factory_a193874e316c6c7f06e8fee5dec87a7e7} 
+\mbox{\hyperlink{structcommon_1_1_graph_dumping_factory_1_1_settings}{Settings}} {\bfseries settings\+\_\+}
+\item 
+\Hypertarget{classcommon_1_1_graph_dumping_factory_ae2f781cc9332fc7b2cfd84dc66f7d68e}\label{classcommon_1_1_graph_dumping_factory_ae2f781cc9332fc7b2cfd84dc66f7d68e} 
+std\+::ofstream {\bfseries ofs\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcommon_1_1_graph_dumping_factory_a97a156b25ed33ff5b5f57555d1feeef3}\index{common::GraphDumpingFactory@{common::GraphDumpingFactory}!GraphDumpingFactory@{GraphDumpingFactory}}
+\index{GraphDumpingFactory@{GraphDumpingFactory}!common::GraphDumpingFactory@{common::GraphDumpingFactory}}
+\doxysubsubsection{\texorpdfstring{GraphDumpingFactory()}{GraphDumpingFactory()}}
+{\footnotesize\ttfamily \label{classcommon_1_1_graph_dumping_factory_a97a156b25ed33ff5b5f57555d1feeef3} 
+Graph\+Dumping\+Factory\+::\+Graph\+Dumping\+Factory (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structcommon_1_1_graph_dumping_factory_1_1_settings}{Settings}}}]{settings}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Construct a new graph dumping factory. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em settings} & settings for this factory \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcommon_1_1_graph_dumping_factory_af2a10754237f8077885c16d85848a1be}\index{common::GraphDumpingFactory@{common::GraphDumpingFactory}!dumpOne@{dumpOne}}
+\index{dumpOne@{dumpOne}!common::GraphDumpingFactory@{common::GraphDumpingFactory}}
+\doxysubsubsection{\texorpdfstring{dumpOne()}{dumpOne()}}
+{\footnotesize\ttfamily \label{classcommon_1_1_graph_dumping_factory_af2a10754237f8077885c16d85848a1be} 
+void Graph\+Dumping\+Factory\+::dump\+One (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcommon_1_1_graph}{Graph}} \&}]{one}{, }\item[{std\+::string\+\_\+view}]{filename}{}\end{DoxyParamCaption})}
+
+
+
+Dumps single graph to a file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em one} & target graph object \\
+\hline
+{\em filename} & file to dump to \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/common/reverted.\+hpp\item 
+src/common/reverted.\+cpp\end{DoxyCompactItemize}

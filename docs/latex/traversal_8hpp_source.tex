@@ -1,0 +1,69 @@
+\doxysection{traversal.\+hpp}
+\hypertarget{traversal_8hpp_source}{}\label{traversal_8hpp_source}\index{src/algorithms/traversal.hpp@{src/algorithms/traversal.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <common/common.hpp>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <queue>}\ \ \textcolor{comment}{//\ Для\ std::queue\ в\ bfsWithTimestamps}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace\ }common\ \{}
+\DoxyCodeLine{00008\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcommon_1_1_traversal_graph}{TraversalGraph}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcommon_1_1_graph}{Graph}}\ \{}
+\DoxyCodeLine{00009\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ DFSWithTimestamps(}
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ node,}
+\DoxyCodeLine{00013\ \ \ \ \ std::unordered\_set<std::string>\&\ visited,}
+\DoxyCodeLine{00014\ \ \ \ \ std::vector<std::string>\&\ result,}
+\DoxyCodeLine{00015\ \ \ \ \ std::unordered\_map<std::string,\ std::pair<int,\ int>>\&\ timestamps,}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keywordtype}{int}\&\ discovery\_time,}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keywordtype}{int}\&\ step\_counter,}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ dot\_dir,}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ png\_dir}
+\DoxyCodeLine{00020\ );}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ saveToDotFile(\textcolor{keyword}{const}\ std::string\&\ filename);}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcommon_1_1_traversal_graph_a48e0f693287759e72eed04487b016442}{findNodeDFS}}(\textcolor{keyword}{const}\ std::string\&\ desired\_node);}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcommon_1_1_traversal_graph_a4f48f7b213eb915604597661e06ed9f7}{showDFSOrder}}();}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ BFSWithTimestamps(}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ start\_node,}
+\DoxyCodeLine{00048\ \ \ \ \ std::unordered\_set<std::string>\&\ visited,}
+\DoxyCodeLine{00049\ \ \ \ \ std::vector<std::string>\&\ result,}
+\DoxyCodeLine{00050\ \ \ \ \ std::unordered\_map<std::string,\ std::pair<int,\ int>>\&\ timestamps,}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{int}\&\ time\_counter,}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ dot\_dir,}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ png\_dir);}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcommon_1_1_traversal_graph_a7b7f6abc6c7395d7cbc15129a296341e}{showBFSOrder}}();}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcommon_1_1_traversal_graph_a741c4e5d4a06f12eca27f39e3b05be80}{findNodeBFS}}(std::string\&\ desired\_node);}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structcommon_1_1_traversal_graph_1_1_edge}{Edge}}\ \{}
+\DoxyCodeLine{00067\ \ \ \ \ std::string\ target;}
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keywordtype}{int}\ weight;}
+\DoxyCodeLine{00069\ \};}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ dijkstraWithTimestamps(}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ start\_node,}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ std::unordered\_map<std::string,\ int>\&\ distances,}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ std::unordered\_map<std::string,\ std::pair<int,\ int>>\&\ timestamps,}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<std::string>\&\ result,}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\&\ time\_counter,}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ std::unordered\_map<std::string,\ std::string>\&\ parents);}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ std::unordered\_map<std::string,\ std::vector<Edge>>\ adjacency\_list;}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ showDijkstraOrder(\textcolor{keyword}{const}\ std::string\&\ source\_node);}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ findNodeDijkstra(std::string\&\ desired\_node);}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ \};}
+\DoxyCodeLine{00086\ \}}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \textcolor{keywordtype}{void}\ clearDirectory(\textcolor{keyword}{const}\ std::string\&\ path);}
+
+\end{DoxyCode}

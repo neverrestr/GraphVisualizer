@@ -1,0 +1,97 @@
+\doxysection{action-\/queue.hpp}
+\hypertarget{action-queue_8hpp_source}{}\label{action-queue_8hpp_source}\index{src/common/action-\/queue.hpp@{src/common/action-\/queue.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{comment}{//\ standard}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <queue>}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{comment}{//\ local}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}common.hpp"{}}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{namespace\ }common\ \{}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcommon_1_1_i_action}{IAction}}\ \{}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcommon_1_1_i_action_a95a61207edf7631d0315e943dc1a24c7}{make}}()\ =\ 0;}
+\DoxyCodeLine{00023\ \ \ \ \ \};}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcommon_1_1_push_node_action}{PushNodeAction}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcommon_1_1_i_action}{IAction}}\ \{}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }push\_node\_proto\ =\ void\ (\mbox{\hyperlink{classcommon_1_1_graph}{common::Graph}}::*)(std::string);}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcommon_1_1_push_node_action}{PushNodeAction}}(push\_node\_proto\ action,\ \mbox{\hyperlink{classcommon_1_1_graph}{Graph}}*\ instance,\ std::string\ name);}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ IAction}}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcommon_1_1_push_node_action_a99c1a20c615c848b14202f0598f4fd03}{make}}()\ \textcolor{keyword}{override}\ \textcolor{keyword}{final};}
+\DoxyCodeLine{00035\ \ \ \ \ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ push\_node\_proto\ action\_;}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcommon_1_1_graph}{Graph}}*\ this\_;}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ std::string\ name\_;}
+\DoxyCodeLine{00040\ \ \ \ \ \};}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcommon_1_1_set_label_action}{SetLabelAction}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcommon_1_1_i_action}{IAction}}\ \{}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }set\_node\_label\ =\ void\ (\mbox{\hyperlink{classcommon_1_1_graph}{common::Graph}}::*)(std::string,\ std::string);}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcommon_1_1_set_label_action}{SetLabelAction}}(set\_node\_label\ action,\ \mbox{\hyperlink{classcommon_1_1_graph}{Graph}}*\ instance,\ std::string\ name,\ std::string\ label);}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ IAction}}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcommon_1_1_set_label_action_ad1bcc08a3a832856f8426fe0de5b7828}{make}}()\ \textcolor{keyword}{override}\ \textcolor{keyword}{final};}
+\DoxyCodeLine{00052\ \ \ \ \ }
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ set\_node\_label\ action\_;}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcommon_1_1_graph}{Graph}}*\ this\_;}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ std::string\ name\_;}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ std::string\ label\_;}
+\DoxyCodeLine{00058\ \ \ \ \ \};}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcommon_1_1_push_edge_action}{PushEdgeAction}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcommon_1_1_i_action}{IAction}}\ \{}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }push\_edge\_action\ =\ void\ (\mbox{\hyperlink{classcommon_1_1_graph}{common::Graph}}::*)(std::string,\ \mbox{\hyperlink{structcommon_1_1_connection}{Connection}});}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcommon_1_1_push_edge_action}{PushEdgeAction}}(push\_edge\_action\ action,\ \mbox{\hyperlink{classcommon_1_1_graph}{Graph}}*\ instance,\ std::string\ name,\ \mbox{\hyperlink{structcommon_1_1_connection}{Connection}}\ edge);}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ IAction}}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcommon_1_1_push_edge_action_a488dbf9ba854f5540ed5ee22e7c744b6}{make}}()\ \textcolor{keyword}{override}\ \textcolor{keyword}{final};}
+\DoxyCodeLine{00070\ \ \ \ \ }
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ push\_edge\_action\ action\_;}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcommon_1_1_graph}{Graph}}*\ this\_;}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ std::string\ name\_;}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcommon_1_1_connection}{Connection}}\ edge\_;}
+\DoxyCodeLine{00076\ \ \ \ \ \};}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcommon_1_1_set_weight_action}{SetWeightAction}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcommon_1_1_i_action}{IAction}}\ \{}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }set\_weight\_proto\ =\ void\ (\mbox{\hyperlink{classcommon_1_1_graph}{common::Graph}}::*)(std::string,\ std::string,\ int);}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcommon_1_1_set_weight_action}{SetWeightAction}}(set\_weight\_proto\ action,\ \mbox{\hyperlink{classcommon_1_1_graph}{Graph}}*\ instance,\ std::string\ source,\ std::string\ target,\ \textcolor{keywordtype}{int}\ weight);}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \textcolor{comment}{//Iaction}}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcommon_1_1_set_weight_action_a242aca5312e1aa6e96a4bb7cd61e1271}{make}}()\ \textcolor{keyword}{override}\ \textcolor{keyword}{final};}
+\DoxyCodeLine{00084\ \ \ \ \ }
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ set\_weight\_proto\ action\_;}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcommon_1_1_graph}{Graph}}*\ this\_;}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ std::string\ source\_;}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ std::string\ target\_;}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ weight\_;}
+\DoxyCodeLine{00091\ \ \ \ \ \};}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcommon_1_1_action_queue}{ActionQueue}}\ \{}
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcommon_1_1_action_queue_ab2e6135fadbc9db1301e432daf77dfd7}{dumpAllActions}}();}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcommon_1_1_action_queue_a55562911cd11b2badb24a14c0f819b3d}{dumpAction}}();}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcommon_1_1_action_queue_a3686c9d697b1d8e2a9b5ecd8f3e6d48e}{query}}(std::shared\_ptr<IAction>\ action);}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ std::queue<std::shared\_ptr<IAction>>\ actions\_;}
+\DoxyCodeLine{00118\ \ \ \ \ \};}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \}}
+
+\end{DoxyCode}

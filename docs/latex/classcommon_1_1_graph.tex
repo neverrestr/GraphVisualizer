@@ -1,0 +1,308 @@
+\doxysection{common\+::Graph Class Reference}
+\hypertarget{classcommon_1_1_graph}{}\label{classcommon_1_1_graph}\index{common::Graph@{common::Graph}}
+
+
+\doxylink{classcommon_1_1_graph}{Graph} Represents graph object as lists of connections. Supports some API calls to make life easier.  
+
+
+
+
+{\ttfamily \#include $<$common.\+hpp$>$}
+
+Inheritance diagram for common\+::Graph\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classcommon_1_1_graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcommon_1_1_graph_a7000621ca4613e8ca2e2e2adf88c68d1}\label{classcommon_1_1_graph_a7000621ca4613e8ca2e2e2adf88c68d1} 
+using {\bfseries graph\+\_\+flags\+\_\+t} = std\+::uint8\+\_\+t
+\item 
+\Hypertarget{classcommon_1_1_graph_a1790640b5d6bb7f18f398b868c3420f5}\label{classcommon_1_1_graph_a1790640b5d6bb7f18f398b868c3420f5} 
+using {\bfseries connections\+\_\+t} = std\+::vector$<$\mbox{\hyperlink{structcommon_1_1_connection}{Connection}}$>$
+\item 
+\Hypertarget{classcommon_1_1_graph_ac63857b179641797fbbec9dc02ef1262}\label{classcommon_1_1_graph_ac63857b179641797fbbec9dc02ef1262} 
+using {\bfseries label\+\_\+container\+\_\+t} = std\+::unordered\+\_\+map$<$std\+::string, std\+::string$>$
+\item 
+\Hypertarget{classcommon_1_1_graph_a840c391a5b364c6d7c6f560e89eecd82}\label{classcommon_1_1_graph_a840c391a5b364c6d7c6f560e89eecd82} 
+using {\bfseries container\+\_\+t} = std\+::unordered\+\_\+map$<$std\+::string, connections\+\_\+t$>$
+\item 
+\Hypertarget{classcommon_1_1_graph_ad7b406c6e03fa397ac217c86d20193ac}\label{classcommon_1_1_graph_ad7b406c6e03fa397ac217c86d20193ac} 
+using {\bfseries container\+\_\+value\+\_\+t} = std\+::pair$<$std\+::string, connections\+\_\+t$>$
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcommon_1_1_graph_aab2936d6a96a6452e7a5b8f1acdd40bb}\label{classcommon_1_1_graph_aab2936d6a96a6452e7a5b8f1acdd40bb} 
+virtual {\bfseries \texorpdfstring{$\sim$}{\string~}\+Graph} ()=default
+\begin{DoxyCompactList}\small\item\em Object destructor. \end{DoxyCompactList}\item 
+\Hypertarget{classcommon_1_1_graph_ae329e61736f7e833c523589ab736e9f6}\label{classcommon_1_1_graph_ae329e61736f7e833c523589ab736e9f6} 
+{\bfseries Graph} () noexcept
+\begin{DoxyCompactList}\small\item\em Construct a new \doxylink{classcommon_1_1_graph}{Graph} object Constructs object and puts it into non-\/initialized state. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcommon_1_1_graph_aa1296de6a5b9ec40c183ae9674fb21c0}{init}} (graph\+\_\+flags\+\_\+t flags=0x0) noexcept
+\begin{DoxyCompactList}\small\item\em Inits graph object Sets flags and puts object into active mode. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcommon_1_1_graph_a2e339f9eaa3e5c60ff89a1b8231b8e65}{is\+Directional}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Checks for drc flag. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcommon_1_1_graph_a2e737caff1c5049f9eae0455a8448509}{is\+Weighted}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Checks for wgh flag. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcommon_1_1_graph_aa3a6bd7f8a9c690f9b0634073ace2049}{push\+Node}} (std\+::string name)
+\begin{DoxyCompactList}\small\item\em Adds new node to graph. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcommon_1_1_graph_ab93ba96b6c30ed0794500e4db02cc75b}{push\+Edge}} (std\+::string source, \mbox{\hyperlink{structcommon_1_1_connection}{Connection}} edge)
+\begin{DoxyCompactList}\small\item\em Adds new edge to graph. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcommon_1_1_graph_a46d586d17b473fa4be7390821026ec57}{set\+Label}} (std\+::string source, std\+::string label)
+\begin{DoxyCompactList}\small\item\em Sets label for node. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcommon_1_1_graph_ac954c5b896de092fddec65f69a9e36bc}{remove\+Label}} (const std\+::string \&source)
+\begin{DoxyCompactList}\small\item\em Removes label for node. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcommon_1_1_graph_a34d275a23296cd38d04d55f14aa7cd80}{are\+Connected}} (std\+::string\+\_\+view source, std\+::string\+\_\+view target) const
+\begin{DoxyCompactList}\small\item\em Checks for connection between nodes. \end{DoxyCompactList}\item 
+std\+::optional$<$ int $>$ \mbox{\hyperlink{classcommon_1_1_graph_a2b4a71cdf34279a6b0df9c6d3f5b62bd}{get\+Weight}} (std\+::string\+\_\+view source, std\+::string\+\_\+view target) const
+\begin{DoxyCompactList}\small\item\em Gets weight of edge. \end{DoxyCompactList}\item 
+std\+::optional$<$ std\+::string $>$ \mbox{\hyperlink{classcommon_1_1_graph_a9666b5551e9bfd30add98360a25c2a78}{get\+Label}} (std\+::string source) const
+\begin{DoxyCompactList}\small\item\em Gets label of node. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classcommon_1_1_graph_a16d84ad54edd1424e89ef949a5ba34b6}{dump\+Graph\+State}} () const
+\begin{DoxyCompactList}\small\item\em Dump graph state to a string. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{classcommon_1_1_graph_a6f74a9609071e30c0277ec2c5fc33ef9}{get\+Nodes}} () const
+\begin{DoxyCompactList}\small\item\em Gets nodes ID. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcommon_1_1_graph_ac143f42b86bb543f0807e032fb5373dc}\label{classcommon_1_1_graph_ac143f42b86bb543f0807e032fb5373dc} 
+friend {\bfseries Graph\+Dumping\+Factory}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcommon_1_1_graph_a2b27ab2ef6fd6affee21606625b1cebf}\label{classcommon_1_1_graph_a2b27ab2ef6fd6affee21606625b1cebf} 
+std\+::uint8\+\_\+t {\bfseries flags\+\_\+}
+\item 
+\Hypertarget{classcommon_1_1_graph_a881df89d4d68aa74a017f2241a40434a}\label{classcommon_1_1_graph_a881df89d4d68aa74a017f2241a40434a} 
+std\+::unique\+\_\+ptr$<$ container\+\_\+t $>$ {\bfseries connections\+\_\+}
+\item 
+\Hypertarget{classcommon_1_1_graph_aa04d8bd8c9d61f9ebeff1f11342fdbd2}\label{classcommon_1_1_graph_aa04d8bd8c9d61f9ebeff1f11342fdbd2} 
+std\+::unique\+\_\+ptr$<$ label\+\_\+container\+\_\+t $>$ {\bfseries labels\+\_\+}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcommon_1_1_graph_a77d12946c860038adb32edbf6b0b1c03}\label{classcommon_1_1_graph_a77d12946c860038adb32edbf6b0b1c03} 
+void {\bfseries insert} (std\+::string\+\_\+view source, \mbox{\hyperlink{structcommon_1_1_connection}{Connection}} edge)
+\item 
+\Hypertarget{classcommon_1_1_graph_acfb6f5760b6436a32d162aa5d270e0e9}\label{classcommon_1_1_graph_acfb6f5760b6436a32d162aa5d270e0e9} 
+connections\+\_\+t\+::iterator {\bfseries find\+Connection} (std\+::string\+\_\+view source, std\+::string\+\_\+view target) const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcommon_1_1_graph_a1a1c36d389516f740bb006f694b2371f}\label{classcommon_1_1_graph_a1a1c36d389516f740bb006f694b2371f} 
+std\+::ostream \& {\bfseries operator$<$$<$} (std\+::ostream \&os, const \mbox{\hyperlink{classcommon_1_1_graph}{Graph}} \&graph)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\doxylink{classcommon_1_1_graph}{Graph} Represents graph object as lists of connections. Supports some API calls to make life easier. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcommon_1_1_graph_a34d275a23296cd38d04d55f14aa7cd80}\index{common::Graph@{common::Graph}!areConnected@{areConnected}}
+\index{areConnected@{areConnected}!common::Graph@{common::Graph}}
+\doxysubsubsection{\texorpdfstring{areConnected()}{areConnected()}}
+{\footnotesize\ttfamily \label{classcommon_1_1_graph_a34d275a23296cd38d04d55f14aa7cd80} 
+bool Graph\+::are\+Connected (\begin{DoxyParamCaption}\item[{std\+::string\+\_\+view}]{source}{, }\item[{std\+::string\+\_\+view}]{target}{}\end{DoxyParamCaption}) const}
+
+
+
+Checks for connection between nodes. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em source} & first node ID \\
+\hline
+{\em target} & second node ID \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if connection exists 
+
+false otherwise 
+\end{DoxyReturn}
+\Hypertarget{classcommon_1_1_graph_a16d84ad54edd1424e89ef949a5ba34b6}\index{common::Graph@{common::Graph}!dumpGraphState@{dumpGraphState}}
+\index{dumpGraphState@{dumpGraphState}!common::Graph@{common::Graph}}
+\doxysubsubsection{\texorpdfstring{dumpGraphState()}{dumpGraphState()}}
+{\footnotesize\ttfamily \label{classcommon_1_1_graph_a16d84ad54edd1424e89ef949a5ba34b6} 
+std\+::string Graph\+::dump\+Graph\+State (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Dump graph state to a string. 
+
+\begin{DoxyReturn}{Returns}
+std\+::string graph state 
+\end{DoxyReturn}
+\Hypertarget{classcommon_1_1_graph_a9666b5551e9bfd30add98360a25c2a78}\index{common::Graph@{common::Graph}!getLabel@{getLabel}}
+\index{getLabel@{getLabel}!common::Graph@{common::Graph}}
+\doxysubsubsection{\texorpdfstring{getLabel()}{getLabel()}}
+{\footnotesize\ttfamily \label{classcommon_1_1_graph_a9666b5551e9bfd30add98360a25c2a78} 
+std\+::optional$<$ std\+::string $>$ Graph\+::get\+Label (\begin{DoxyParamCaption}\item[{std\+::string}]{source}{}\end{DoxyParamCaption}) const}
+
+
+
+Gets label of node. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em source} & node ID \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+std\+::optional$<$std\+::string$>$ label if exists 
+\end{DoxyReturn}
+\Hypertarget{classcommon_1_1_graph_a6f74a9609071e30c0277ec2c5fc33ef9}\index{common::Graph@{common::Graph}!getNodes@{getNodes}}
+\index{getNodes@{getNodes}!common::Graph@{common::Graph}}
+\doxysubsubsection{\texorpdfstring{getNodes()}{getNodes()}}
+{\footnotesize\ttfamily \label{classcommon_1_1_graph_a6f74a9609071e30c0277ec2c5fc33ef9} 
+std\+::vector$<$ std\+::string $>$ Graph\+::get\+Nodes (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Gets nodes ID. 
+
+\begin{DoxyReturn}{Returns}
+std\+::vector$<$std\+::string$>$ graph nodes vector 
+\end{DoxyReturn}
+\Hypertarget{classcommon_1_1_graph_a2b4a71cdf34279a6b0df9c6d3f5b62bd}\index{common::Graph@{common::Graph}!getWeight@{getWeight}}
+\index{getWeight@{getWeight}!common::Graph@{common::Graph}}
+\doxysubsubsection{\texorpdfstring{getWeight()}{getWeight()}}
+{\footnotesize\ttfamily \label{classcommon_1_1_graph_a2b4a71cdf34279a6b0df9c6d3f5b62bd} 
+std\+::optional$<$ int $>$ Graph\+::get\+Weight (\begin{DoxyParamCaption}\item[{std\+::string\+\_\+view}]{source}{, }\item[{std\+::string\+\_\+view}]{target}{}\end{DoxyParamCaption}) const}
+
+
+
+Gets weight of edge. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em source} & first node ID \\
+\hline
+{\em target} & second node ID \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+std\+::optional$<$int$>$ weight if exists 
+\end{DoxyReturn}
+\Hypertarget{classcommon_1_1_graph_aa1296de6a5b9ec40c183ae9674fb21c0}\index{common::Graph@{common::Graph}!init@{init}}
+\index{init@{init}!common::Graph@{common::Graph}}
+\doxysubsubsection{\texorpdfstring{init()}{init()}}
+{\footnotesize\ttfamily \label{classcommon_1_1_graph_aa1296de6a5b9ec40c183ae9674fb21c0} 
+void Graph\+::init (\begin{DoxyParamCaption}\item[{graph\+\_\+flags\+\_\+t}]{flags}{ = {\ttfamily 0x0}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Inits graph object Sets flags and puts object into active mode. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em flags} & flags to set \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classcommon_1_1_graph_a2e339f9eaa3e5c60ff89a1b8231b8e65}\index{common::Graph@{common::Graph}!isDirectional@{isDirectional}}
+\index{isDirectional@{isDirectional}!common::Graph@{common::Graph}}
+\doxysubsubsection{\texorpdfstring{isDirectional()}{isDirectional()}}
+{\footnotesize\ttfamily \label{classcommon_1_1_graph_a2e339f9eaa3e5c60ff89a1b8231b8e65} 
+bool Graph\+::is\+Directional (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Checks for drc flag. 
+
+\begin{DoxyReturn}{Returns}
+true if graph is directional 
+
+false otherwise 
+\end{DoxyReturn}
+\Hypertarget{classcommon_1_1_graph_a2e737caff1c5049f9eae0455a8448509}\index{common::Graph@{common::Graph}!isWeighted@{isWeighted}}
+\index{isWeighted@{isWeighted}!common::Graph@{common::Graph}}
+\doxysubsubsection{\texorpdfstring{isWeighted()}{isWeighted()}}
+{\footnotesize\ttfamily \label{classcommon_1_1_graph_a2e737caff1c5049f9eae0455a8448509} 
+bool Graph\+::is\+Weighted (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Checks for wgh flag. 
+
+\begin{DoxyReturn}{Returns}
+true if graph is weighted 
+
+false otherwise 
+\end{DoxyReturn}
+\Hypertarget{classcommon_1_1_graph_ab93ba96b6c30ed0794500e4db02cc75b}\index{common::Graph@{common::Graph}!pushEdge@{pushEdge}}
+\index{pushEdge@{pushEdge}!common::Graph@{common::Graph}}
+\doxysubsubsection{\texorpdfstring{pushEdge()}{pushEdge()}}
+{\footnotesize\ttfamily \label{classcommon_1_1_graph_ab93ba96b6c30ed0794500e4db02cc75b} 
+void Graph\+::push\+Edge (\begin{DoxyParamCaption}\item[{std\+::string}]{source}{, }\item[{\mbox{\hyperlink{structcommon_1_1_connection}{Connection}}}]{edge}{}\end{DoxyParamCaption})}
+
+
+
+Adds new edge to graph. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em source} & source node ID \\
+\hline
+{\em edge} & edge to add \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classcommon_1_1_graph_aa3a6bd7f8a9c690f9b0634073ace2049}\index{common::Graph@{common::Graph}!pushNode@{pushNode}}
+\index{pushNode@{pushNode}!common::Graph@{common::Graph}}
+\doxysubsubsection{\texorpdfstring{pushNode()}{pushNode()}}
+{\footnotesize\ttfamily \label{classcommon_1_1_graph_aa3a6bd7f8a9c690f9b0634073ace2049} 
+void Graph\+::push\+Node (\begin{DoxyParamCaption}\item[{std\+::string}]{name}{}\end{DoxyParamCaption})}
+
+
+
+Adds new node to graph. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & node ID \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classcommon_1_1_graph_ac954c5b896de092fddec65f69a9e36bc}\index{common::Graph@{common::Graph}!removeLabel@{removeLabel}}
+\index{removeLabel@{removeLabel}!common::Graph@{common::Graph}}
+\doxysubsubsection{\texorpdfstring{removeLabel()}{removeLabel()}}
+{\footnotesize\ttfamily \label{classcommon_1_1_graph_ac954c5b896de092fddec65f69a9e36bc} 
+void Graph\+::remove\+Label (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{source}{}\end{DoxyParamCaption})}
+
+
+
+Removes label for node. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em source} & node ID \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classcommon_1_1_graph_a46d586d17b473fa4be7390821026ec57}\index{common::Graph@{common::Graph}!setLabel@{setLabel}}
+\index{setLabel@{setLabel}!common::Graph@{common::Graph}}
+\doxysubsubsection{\texorpdfstring{setLabel()}{setLabel()}}
+{\footnotesize\ttfamily \label{classcommon_1_1_graph_a46d586d17b473fa4be7390821026ec57} 
+void Graph\+::set\+Label (\begin{DoxyParamCaption}\item[{std\+::string}]{source}{, }\item[{std\+::string}]{label}{}\end{DoxyParamCaption})}
+
+
+
+Sets label for node. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em source} & node ID \\
+\hline
+{\em label} & label string \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/common/common.\+hpp\item 
+src/common/common.\+cpp\end{DoxyCompactItemize}

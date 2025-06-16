@@ -13,6 +13,7 @@ add_subdirectory(parser)
 add_subdirectory(lexer)
 add_subdirectory(tests)
 add_subdirectory(algorithms)
+add_subdirectory(utils) #new
 
 add_executable(graph-serializer ${SOURCES} ${HEADERS})
 
@@ -21,3 +22,4 @@ target_link_libraries(graph-serializer PRIVATE parser)
 target_link_libraries(graph-serializer PRIVATE common)
 target_link_libraries(graph-serializer PRIVATE tiny-fsm)
 target_link_libraries(graph-serializer PRIVATE algorithms)
+target_link_libraries(graph-serializer PRIVATE utils) #new

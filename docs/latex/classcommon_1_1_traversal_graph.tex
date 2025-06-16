@@ -1,0 +1,151 @@
+\doxysection{common\+::Traversal\+Graph Class Reference}
+\hypertarget{classcommon_1_1_traversal_graph}{}\label{classcommon_1_1_traversal_graph}\index{common::TraversalGraph@{common::TraversalGraph}}
+Inheritance diagram for common\+::Traversal\+Graph\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classcommon_1_1_traversal_graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structcommon_1_1_traversal_graph_1_1_edge}{Edge}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcommon_1_1_traversal_graph_a8a033cfed5417bbfc58fa2e83612e5bf}\label{classcommon_1_1_traversal_graph_a8a033cfed5417bbfc58fa2e83612e5bf} 
+void {\bfseries DFSWith\+Timestamps} (const std\+::string \&node, std\+::unordered\+\_\+set$<$ std\+::string $>$ \&visited, std\+::vector$<$ std\+::string $>$ \&result, std\+::unordered\+\_\+map$<$ std\+::string, std\+::pair$<$ int, int $>$ $>$ \&timestamps, int \&discovery\+\_\+time, int \&step\+\_\+counter, const std\+::string \&dot\+\_\+dir, const std\+::string \&png\+\_\+dir)
+\item 
+\Hypertarget{classcommon_1_1_traversal_graph_a7e081de3f20a4547c02590bf5de7e952}\label{classcommon_1_1_traversal_graph_a7e081de3f20a4547c02590bf5de7e952} 
+void {\bfseries save\+To\+Dot\+File} (const std\+::string \&filename)
+\item 
+void \mbox{\hyperlink{classcommon_1_1_traversal_graph_a48e0f693287759e72eed04487b016442}{find\+Node\+DFS}} (const std\+::string \&desired\+\_\+node)
+\begin{DoxyCompactList}\small\item\em Recursive DFS with timestampes for traversal order. \end{DoxyCompactList}\item 
+\Hypertarget{classcommon_1_1_traversal_graph_a4f48f7b213eb915604597661e06ed9f7}\label{classcommon_1_1_traversal_graph_a4f48f7b213eb915604597661e06ed9f7} 
+void {\bfseries show\+DFSOrder} ()
+\begin{DoxyCompactList}\small\item\em Show depth-\/first search traversal order of graph. \end{DoxyCompactList}\item 
+\Hypertarget{classcommon_1_1_traversal_graph_a9aa67159a43c0f39ee0a0a5ccef42d67}\label{classcommon_1_1_traversal_graph_a9aa67159a43c0f39ee0a0a5ccef42d67} 
+void {\bfseries BFSWith\+Timestamps} (const std\+::string \&start\+\_\+node, std\+::unordered\+\_\+set$<$ std\+::string $>$ \&visited, std\+::vector$<$ std\+::string $>$ \&result, std\+::unordered\+\_\+map$<$ std\+::string, std\+::pair$<$ int, int $>$ $>$ \&timestamps, int \&time\+\_\+counter, const std\+::string \&dot\+\_\+dir, const std\+::string \&png\+\_\+dir)
+\item 
+\Hypertarget{classcommon_1_1_traversal_graph_a7b7f6abc6c7395d7cbc15129a296341e}\label{classcommon_1_1_traversal_graph_a7b7f6abc6c7395d7cbc15129a296341e} 
+void {\bfseries show\+BFSOrder} ()
+\begin{DoxyCompactList}\small\item\em Show breadth-\/first search traversal order of graph. \end{DoxyCompactList}\item 
+\Hypertarget{classcommon_1_1_traversal_graph_a741c4e5d4a06f12eca27f39e3b05be80}\label{classcommon_1_1_traversal_graph_a741c4e5d4a06f12eca27f39e3b05be80} 
+void {\bfseries find\+Node\+BFS} (std\+::string \&desired\+\_\+node)
+\begin{DoxyCompactList}\small\item\em Find node with breadth-\/first search of graph. \end{DoxyCompactList}\item 
+\Hypertarget{classcommon_1_1_traversal_graph_a25e2a23a1369d728a96f67ea5e325ed2}\label{classcommon_1_1_traversal_graph_a25e2a23a1369d728a96f67ea5e325ed2} 
+void {\bfseries dijkstra\+With\+Timestamps} (const std\+::string \&start\+\_\+node, std\+::unordered\+\_\+map$<$ std\+::string, int $>$ \&distances, std\+::unordered\+\_\+map$<$ std\+::string, std\+::pair$<$ int, int $>$ $>$ \&timestamps, std\+::vector$<$ std\+::string $>$ \&result, int \&time\+\_\+counter, std\+::unordered\+\_\+map$<$ std\+::string, std\+::string $>$ \&parents)
+\item 
+\Hypertarget{classcommon_1_1_traversal_graph_af575c6ef8a78518b05b22f012b3d51e9}\label{classcommon_1_1_traversal_graph_af575c6ef8a78518b05b22f012b3d51e9} 
+void {\bfseries show\+Dijkstra\+Order} (const std\+::string \&source\+\_\+node)
+\item 
+\Hypertarget{classcommon_1_1_traversal_graph_a48b2f6005a1c3916a6f9cf2748d624c9}\label{classcommon_1_1_traversal_graph_a48b2f6005a1c3916a6f9cf2748d624c9} 
+void {\bfseries find\+Node\+Dijkstra} (std\+::string \&desired\+\_\+node)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcommon_1_1_graph}{common\+::\+Graph}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual {\bfseries \texorpdfstring{$\sim$}{\string~}\+Graph} ()=default
+\begin{DoxyCompactList}\small\item\em Object destructor. \end{DoxyCompactList}\item 
+{\bfseries Graph} () noexcept
+\begin{DoxyCompactList}\small\item\em Construct a new \doxylink{classcommon_1_1_graph}{Graph} object Constructs object and puts it into non-\/initialized state. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcommon_1_1_graph_aa1296de6a5b9ec40c183ae9674fb21c0}{init}} (graph\+\_\+flags\+\_\+t flags=0x0) noexcept
+\begin{DoxyCompactList}\small\item\em Inits graph object Sets flags and puts object into active mode. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcommon_1_1_graph_a2e339f9eaa3e5c60ff89a1b8231b8e65}{is\+Directional}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Checks for drc flag. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcommon_1_1_graph_a2e737caff1c5049f9eae0455a8448509}{is\+Weighted}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Checks for wgh flag. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcommon_1_1_graph_aa3a6bd7f8a9c690f9b0634073ace2049}{push\+Node}} (std\+::string name)
+\begin{DoxyCompactList}\small\item\em Adds new node to graph. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcommon_1_1_graph_ab93ba96b6c30ed0794500e4db02cc75b}{push\+Edge}} (std\+::string source, \mbox{\hyperlink{structcommon_1_1_connection}{Connection}} edge)
+\begin{DoxyCompactList}\small\item\em Adds new edge to graph. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcommon_1_1_graph_a46d586d17b473fa4be7390821026ec57}{set\+Label}} (std\+::string source, std\+::string label)
+\begin{DoxyCompactList}\small\item\em Sets label for node. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcommon_1_1_graph_ac954c5b896de092fddec65f69a9e36bc}{remove\+Label}} (const std\+::string \&source)
+\begin{DoxyCompactList}\small\item\em Removes label for node. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classcommon_1_1_graph_a34d275a23296cd38d04d55f14aa7cd80}{are\+Connected}} (std\+::string\+\_\+view source, std\+::string\+\_\+view target) const
+\begin{DoxyCompactList}\small\item\em Checks for connection between nodes. \end{DoxyCompactList}\item 
+std\+::optional$<$ int $>$ \mbox{\hyperlink{classcommon_1_1_graph_a2b4a71cdf34279a6b0df9c6d3f5b62bd}{get\+Weight}} (std\+::string\+\_\+view source, std\+::string\+\_\+view target) const
+\begin{DoxyCompactList}\small\item\em Gets weight of edge. \end{DoxyCompactList}\item 
+std\+::optional$<$ std\+::string $>$ \mbox{\hyperlink{classcommon_1_1_graph_a9666b5551e9bfd30add98360a25c2a78}{get\+Label}} (std\+::string source) const
+\begin{DoxyCompactList}\small\item\em Gets label of node. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classcommon_1_1_graph_a16d84ad54edd1424e89ef949a5ba34b6}{dump\+Graph\+State}} () const
+\begin{DoxyCompactList}\small\item\em Dump graph state to a string. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{classcommon_1_1_graph_a6f74a9609071e30c0277ec2c5fc33ef9}{get\+Nodes}} () const
+\begin{DoxyCompactList}\small\item\em Gets nodes ID. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classcommon_1_1_traversal_graph_a17a1a4cb343aca3c2bee14d118015058}\label{classcommon_1_1_traversal_graph_a17a1a4cb343aca3c2bee14d118015058} 
+std\+::unordered\+\_\+map$<$ std\+::string, std\+::vector$<$ \mbox{\hyperlink{structcommon_1_1_traversal_graph_1_1_edge}{Edge}} $>$ $>$ {\bfseries adjacency\+\_\+list}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{classcommon_1_1_graph}{common\+::\+Graph}}}
+\begin{DoxyCompactItemize}
+\item 
+friend {\bfseries Graph\+Dumping\+Factory}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Public Types inherited from \mbox{\hyperlink{classcommon_1_1_graph}{common\+::\+Graph}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries graph\+\_\+flags\+\_\+t} = std\+::uint8\+\_\+t
+\item 
+using {\bfseries connections\+\_\+t} = std\+::vector$<$\mbox{\hyperlink{structcommon_1_1_connection}{Connection}}$>$
+\item 
+using {\bfseries label\+\_\+container\+\_\+t} = std\+::unordered\+\_\+map$<$std\+::string, std\+::string$>$
+\item 
+using {\bfseries container\+\_\+t} = std\+::unordered\+\_\+map$<$std\+::string, connections\+\_\+t$>$
+\item 
+using {\bfseries container\+\_\+value\+\_\+t} = std\+::pair$<$std\+::string, connections\+\_\+t$>$
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcommon_1_1_graph}{common\+::\+Graph}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::uint8\+\_\+t {\bfseries flags\+\_\+}
+\item 
+std\+::unique\+\_\+ptr$<$ container\+\_\+t $>$ {\bfseries connections\+\_\+}
+\item 
+std\+::unique\+\_\+ptr$<$ label\+\_\+container\+\_\+t $>$ {\bfseries labels\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcommon_1_1_traversal_graph_a48e0f693287759e72eed04487b016442}\index{common::TraversalGraph@{common::TraversalGraph}!findNodeDFS@{findNodeDFS}}
+\index{findNodeDFS@{findNodeDFS}!common::TraversalGraph@{common::TraversalGraph}}
+\doxysubsubsection{\texorpdfstring{findNodeDFS()}{findNodeDFS()}}
+{\footnotesize\ttfamily \label{classcommon_1_1_traversal_graph_a48e0f693287759e72eed04487b016442} 
+void Traversal\+Graph\+::find\+Node\+DFS (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{desired\+\_\+node}{}\end{DoxyParamCaption})}
+
+
+
+Recursive DFS with timestampes for traversal order. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em node} & Current processing node \\
+\hline
+{\em visited} & Set of visited nodes \\
+\hline
+{\em result} & Vector to preserve traversal order \\
+\hline
+{\em timestamps} & Timestamps of current node \\
+\hline
+{\em discovery\+\_\+time} & Start time of current node \\
+\hline
+{\em flag\+\_\+to\+\_\+quit} & Flag to quit from recursion \\
+\hline
+{\em searched\+\_\+node} & Desired node\\
+\hline
+\end{DoxyParams}
+Find node with depth-\/first search of graph 
+\begin{DoxyParams}{Parameters}
+{\em desired\+\_\+node} & Desired node of graph \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/algorithms/traversal.\+hpp\item 
+src/algorithms/traversal.\+cpp\end{DoxyCompactItemize}

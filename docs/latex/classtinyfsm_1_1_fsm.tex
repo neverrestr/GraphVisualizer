@@ -1,0 +1,64 @@
+\doxysection{tinyfsm\+::Fsm\texorpdfstring{$<$}{<} F \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classtinyfsm_1_1_fsm}{}\label{classtinyfsm_1_1_fsm}\index{tinyfsm::Fsm$<$ F $>$@{tinyfsm::Fsm$<$ F $>$}}
+Inheritance diagram for tinyfsm\+::Fsm\texorpdfstring{$<$}{<} F \texorpdfstring{$>$}{>}\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classtinyfsm_1_1_fsm}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classtinyfsm_1_1_fsm_af1bc315f40c2e7917a57c61a8b951d5c}\label{classtinyfsm_1_1_fsm_af1bc315f40c2e7917a57c61a8b951d5c} 
+using {\bfseries fsmtype} = \mbox{\hyperlink{classtinyfsm_1_1_fsm}{Fsm}}$<$F$>$
+\item 
+\Hypertarget{classtinyfsm_1_1_fsm_ae46ebb0c233363a9c03a829f5f6177f1}\label{classtinyfsm_1_1_fsm_ae46ebb0c233363a9c03a829f5f6177f1} 
+using {\bfseries state\+\_\+ptr\+\_\+t} = F \texorpdfstring{$\ast$}{*}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classtinyfsm_1_1_fsm_a72e41a72056743d89256f8b6225b3d68}\label{classtinyfsm_1_1_fsm_a72e41a72056743d89256f8b6225b3d68} 
+{\footnotesize template$<$typename S $>$ }\\static constexpr S \& {\bfseries state} (void)
+\item 
+\Hypertarget{classtinyfsm_1_1_fsm_a7e927c1afe545be3b8c5c7a9db1f14b5}\label{classtinyfsm_1_1_fsm_a7e927c1afe545be3b8c5c7a9db1f14b5} 
+{\footnotesize template$<$typename S $>$ }\\static constexpr bool {\bfseries is\+\_\+in\+\_\+state} (void)
+\item 
+\Hypertarget{classtinyfsm_1_1_fsm_a7423ff0f575dc719589dd42d6aac9670}\label{classtinyfsm_1_1_fsm_a7423ff0f575dc719589dd42d6aac9670} 
+static void {\bfseries set\+\_\+initial\+\_\+state} ()
+\begin{DoxyCompactList}\small\item\em state machine functions \end{DoxyCompactList}\item 
+\Hypertarget{classtinyfsm_1_1_fsm_a389db22d15cb2f2cd5fd3782b052f27f}\label{classtinyfsm_1_1_fsm_a389db22d15cb2f2cd5fd3782b052f27f} 
+static void {\bfseries reset} ()
+\item 
+\Hypertarget{classtinyfsm_1_1_fsm_acf68c56301078838b72a6b47535dc72a}\label{classtinyfsm_1_1_fsm_acf68c56301078838b72a6b47535dc72a} 
+static void {\bfseries enter} ()
+\item 
+\Hypertarget{classtinyfsm_1_1_fsm_a7bc93dcf550a6ac953c57358d37693f7}\label{classtinyfsm_1_1_fsm_a7bc93dcf550a6ac953c57358d37693f7} 
+static void {\bfseries start} ()
+\item 
+\Hypertarget{classtinyfsm_1_1_fsm_a151b1af4357151d7796cb4e06c9602f8}\label{classtinyfsm_1_1_fsm_a151b1af4357151d7796cb4e06c9602f8} 
+{\footnotesize template$<$typename E $>$ }\\static void {\bfseries dispatch} (E const \&event)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classtinyfsm_1_1_fsm_ad9fd3f365f94d7a8fd40a14e4a0bde69}\label{classtinyfsm_1_1_fsm_ad9fd3f365f94d7a8fd40a14e4a0bde69} 
+static state\+\_\+ptr\+\_\+t {\bfseries current\+\_\+state\+\_\+ptr}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classtinyfsm_1_1_fsm_ac17d38c60fdfbe1b4b6d453d724b9524}\label{classtinyfsm_1_1_fsm_ac17d38c60fdfbe1b4b6d453d724b9524} 
+{\footnotesize template$<$typename S $>$ }\\void {\bfseries transit} (void)
+\begin{DoxyCompactList}\small\item\em state transition functions \end{DoxyCompactList}\item 
+\Hypertarget{classtinyfsm_1_1_fsm_a176b4d24ce86fa91c3e6bc0d75ad328b}\label{classtinyfsm_1_1_fsm_a176b4d24ce86fa91c3e6bc0d75ad328b} 
+{\footnotesize template$<$typename S , typename Action\+Function $>$ }\\void {\bfseries transit} (Action\+Function action\+\_\+function)
+\item 
+\Hypertarget{classtinyfsm_1_1_fsm_a43ef79bd6b152e70aeae418a5c95518d}\label{classtinyfsm_1_1_fsm_a43ef79bd6b152e70aeae418a5c95518d} 
+{\footnotesize template$<$typename S , typename Action\+Function , typename Condition\+Function $>$ }\\void {\bfseries transit} (Action\+Function action\+\_\+function, Condition\+Function condition\+\_\+function)
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+contrib/tiny-\/fsm/tinyfsm.\+hpp\end{DoxyCompactItemize}
