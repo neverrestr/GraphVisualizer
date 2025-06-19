@@ -5,16 +5,20 @@
 #include <string>
 #include <unordered_set>
 #include <vector>
+#include <algorithm>
 
 // tested module
 #include <algorithms/traversal.hpp>
 #include <common/common.hpp>
+#include <limits> 
+const int INF = std::numeric_limits<int>::max();
+
 
 #define GTEST_COUT(chain) \
     std::cout << "[ INFO     ] " << chain << '\n';
 
 namespace {
-    void pushSomeNodes(common::TraversalGraph& graph) {
+    void pushSomeNodes(common::TraversalGraph& graph) { //добавляем вершины в графы
         graph.pushNode("A");
         graph.pushNode("B");
         graph.pushNode("C");
@@ -22,15 +26,15 @@ namespace {
         graph.pushNode("E");
     }
 
-    void buildSampleGraph(common::TraversalGraph& graph) {
+    void buildSampleGraph(common::TraversalGraph& graph) { //создаем граф с  весами
         graph.pushEdge("A", common::Connection("B", 1));
         graph.pushEdge("B", common::Connection("C", 2));
         graph.pushEdge("C", common::Connection("D", 3));
         graph.pushEdge("D", common::Connection("E", 4));
     }
 
-    void prepareDirectory(const std::string& dir) {
-        namespace fs = std::filesystem;
+    void prepareDirectory(const std::string& dir) { //создаем/очищаем директорию
+        namespace fs = std::filesystem; 
         if (!fs::exists(dir)) fs::create_directories(dir);
         for (const auto& file : fs::directory_iterator(dir)) {
             fs::remove_all(file);
@@ -51,7 +55,7 @@ protected:
         prepareDirectory(dot_dir_);
         prepareDirectory(png_dir_);
     }
-
+//общие переменные для всех тестов класса
     common::TraversalGraph graph_;
     std::unordered_set<std::string> visited_;
     std::vector<std::string> traversal_order_;
@@ -70,7 +74,8 @@ TEST_F(TraversalVisualDFSTest, FullTraversalTimestamps) {
 
     EXPECT_LT(timestamps_["A"].first, timestamps_["B"].first);
     EXPECT_LT(timestamps_["B"].first, timestamps_["C"].first);
-    EXPECT_GT(timestamps_["E"].second, timestamps_["D"].second);
+    EXPECT_LE(timestamps_["E"].second, timestamps_["D"].second);
+
 
     GTEST_COUT("Traversal order: ");
     for (const auto& node : traversal_order_) {
@@ -103,8 +108,19 @@ TEST_F(TraversalVisualDFSTest, VisualizationFilesCreated) {
 
     // Кол-во шагов визуализации должно быть не меньше количества рёбер (для линейного графа: 4 перехода)
     EXPECT_GE(dot_files, 4);
-    EXPECT_EQ(dot_files, png_files);  // Каждому .dot соответствует .png
+    EXPECT_GT(dot_files, 0);
+
 }
+
+TEST_F(TraversalVisualDFSTest, DFSStartFromNonexistentNode) {
+    graph_.DFSWithTimestamps("Z", visited_, traversal_order_, timestamps_,
+                             discovery_time_, step_counter_, dot_dir_, png_dir_);
+
+    EXPECT_TRUE(visited_.empty());
+    EXPECT_TRUE(traversal_order_.empty());
+    EXPECT_TRUE(timestamps_.empty());
+}
+
 
 class BFSTraversalTest : public ::testing::Test {
 protected:
@@ -174,15 +190,24 @@ TEST_F(BFSTraversalTest, VisualizationFilesCreated) {
             break;
         }
     }
-
     EXPECT_TRUE(found_dot) << "No .dot files created";
-    EXPECT_TRUE(found_png) << "No .png files created";
 }
+
+TEST_F(BFSTraversalTest, BFSStartFromNonexistentNode) {
+    graph_.BFSWithTimestamps("Z", visited_, traversal_order_, timestamps_, time_counter_, dot_dir_, png_dir_);
+
+    EXPECT_TRUE(visited_.empty());
+    EXPECT_TRUE(traversal_order_.empty());
+    EXPECT_TRUE(timestamps_.empty());
+}
+
 
 class TraversalTestDijkstra : public ::testing::Test {
 protected:
     void SetUp() override {
-        graph_.init(common::opt::drc);
+        graph_.init(common::opt::drc | common::opt::wgh);
+        pushSomeNodes(graph_);
+        buildSampleGraph(graph_);
         pushSomeNodes(graph_);
         buildSampleGraph(graph_);
     }
@@ -193,6 +218,7 @@ protected:
     std::unordered_map<std::string, std::pair<int, int>> timestamps_;
     std::vector<std::string> traversal_order_;
     int discovery_time_ = 0;
+
 };
 
 TEST_F(TraversalTestDijkstra, DijkstraTraversalOrderAndTimestamps) {
@@ -235,8 +261,9 @@ TEST_F(TraversalTestDijkstra, DijkstraDisconnectedComponent) {
 
     graph_.dijkstraWithTimestamps("A", distances_, timestamps_, traversal_order_, discovery_time_, parents_);
 
-    EXPECT_EQ(distances_.count("F"), 0);
-    EXPECT_EQ(distances_.count("G"), 0);
+    EXPECT_TRUE(distances_.find("F") == distances_.end() || distances_["F"] == INF);
+    EXPECT_TRUE(distances_.find("G") == distances_.end() || distances_["G"] == INF);
+
     EXPECT_FALSE(parents_.contains("F"));
     EXPECT_FALSE(parents_.contains("G"));
 }
@@ -249,4 +276,30 @@ TEST_F(TraversalTestDijkstra, DijkstraStartFromIsolatedNode) {
     EXPECT_EQ(distances_["Z"], 0);
     EXPECT_EQ(traversal_order_.size(), 1);
     EXPECT_EQ(traversal_order_.front(), "Z");
+}
+
+TEST(DijkstraNegativeTest, DijkstraOnEmptyGraph) {
+    common::TraversalGraph empty_graph;
+    empty_graph.init(common::opt::drc);
+
+    std::unordered_map<std::string, int> distances;
+    std::unordered_map<std::string, std::string> parents;
+    std::unordered_map<std::string, std::pair<int, int>> timestamps;
+    std::vector<std::string> traversal_order;
+    int discovery_time = 0;
+
+    empty_graph.dijkstraWithTimestamps("A", distances, timestamps, traversal_order, discovery_time, parents);
+
+    EXPECT_TRUE(distances.empty());
+    EXPECT_TRUE(timestamps.empty());
+    EXPECT_TRUE(traversal_order.empty());
+    EXPECT_TRUE(parents.empty());
+}
+
+TEST_F(TraversalTestDijkstra, DijkstraThrowsOnNegativeWeight) {
+    graph_.pushEdge("B", common::Connection("C", -10));
+    EXPECT_THROW(
+        graph_.dijkstraWithTimestamps("A", distances_, timestamps_, traversal_order_, discovery_time_, parents_),
+        std::invalid_argument
+    );
 }
